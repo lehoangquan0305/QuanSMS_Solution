@@ -66,7 +66,6 @@
                                 </td>
 
                                 <td>
-
                                     @if (user.Role == "Administrator")
                                     {
                                         <span class="badge bg-danger px-3 py-2">
@@ -85,7 +84,6 @@
                                             @user.Role
                                         </span>
                                     }
-
                                 </td>
 
                                 <td class="text-center">
@@ -95,9 +93,13 @@
                                         ✏ Sửa
                                     </a>
 
-                                    <a href="/User/Delete/@user.Id"
+                                    <!-- BUTTON XÓA MỚI (MODAL) -->
+                                    <a href="#"
                                        class="btn btn-sm btn-outline-danger"
-                                       onclick="return confirm('Bạn có chắc muốn xóa?')">
+                                       data-bs-toggle="modal"
+                                       data-bs-target="#deleteModal"
+                                       data-id="@user.Id"
+                                       data-name="@user.Username">
                                         🗑 Xóa
                                     </a>
 
@@ -117,3 +119,47 @@
     </div>
 
 </div>
+
+<!-- MODAL CONFIRM DELETE -->
+<div class="modal fade" id="deleteModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title">Xác nhận xóa</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body">
+                Bạn có chắc muốn xóa user:
+                <strong id="userName"></strong> ?
+            </div>
+
+            <div class="modal-footer">
+                <a id="confirmDeleteBtn" class="btn btn-danger">Xóa</a>
+                <button class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- SCRIPT HANDLE MODAL -->
+<script>
+    var deleteModal = document.getElementById('deleteModal');
+
+    deleteModal.addEventListener('show.bs.modal', function (event) {
+
+        var button = event.relatedTarget;
+
+        var userId = button.getAttribute('data-id');
+        var userName = button.getAttribute('data-name');
+
+        document.getElementById('userName').textContent = userName;
+
+        document.getElementById('confirmDeleteBtn').setAttribute(
+            'href',
+            '/User/Delete/' + userId
+        );
+    });
+</script>

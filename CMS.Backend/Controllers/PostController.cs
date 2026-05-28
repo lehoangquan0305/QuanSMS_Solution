@@ -15,27 +15,23 @@ namespace CMS.Backend.Controllers
         }
 
         // =========================
-        // DANH SÁCH + LỌC THEO DANH MỤC
+        // DANH SÁCH + LỌC DANH MỤC
         // =========================
         public IActionResult Index(int? id)
         {
-            // Query gốc
             var query = _context.Posts
                 .Include(p => p.Category)
                 .OrderByDescending(p => p.CreatedDate)
                 .AsQueryable();
 
-            // Nếu có id => lọc theo danh mục
+            // Lọc theo danh mục
             if (id != null)
             {
-                query = (IOrderedQueryable<Post>)query
-                    .Where(p => p.CategoryId == id);
+                query = query.Where(p => p.CategoryId == id);
             }
 
-            // Thực thi query
             var posts = query.ToList();
 
-            // Gửi id ra View để biết đang lọc danh mục nào
             ViewBag.CategoryId = id;
 
             return View(posts);
@@ -72,10 +68,41 @@ namespace CMS.Backend.Controllers
         // XỬ LÝ THÊM
         // =========================
         [HttpPost]
-        public IActionResult Create(Post post)
+        public IActionResult Create(Post post, IFormFile uploadImage)
         {
             if (ModelState.IsValid)
             {
+                // Upload ảnh
+                if (uploadImage != null && uploadImage.Length > 0)
+                {
+                    string folder = Path.Combine(
+                        Directory.GetCurrentDirectory(),
+                        "wwwroot/uploads"
+                    );
+
+                    // Nếu chưa có folder uploads
+                    if (!Directory.Exists(folder))
+                    {
+                        Directory.CreateDirectory(folder);
+                    }
+
+                    // Tạo tên file random
+                    string fileName =
+                        Guid.NewGuid().ToString()
+                        + Path.GetExtension(uploadImage.FileName);
+
+                    string filePath = Path.Combine(folder, fileName);
+
+                    // Copy file
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        uploadImage.CopyTo(stream);
+                    }
+
+                    // Lưu đường dẫn DB
+                    post.ImageUrl = "/uploads/" + fileName;
+                }
+
                 post.CreatedDate = DateTime.Now;
 
                 _context.Posts.Add(post);
@@ -111,10 +138,49 @@ namespace CMS.Backend.Controllers
         // XỬ LÝ SỬA
         // =========================
         [HttpPost]
-        public IActionResult Edit(Post post)
+        public IActionResult Edit(Post post, IFormFile uploadImage)
         {
             if (ModelState.IsValid)
             {
+                // Nếu upload ảnh mới
+                if (uploadImage != null && uploadImage.Length > 0)
+                {
+                    string folder = Path.Combine(
+                        Directory.GetCurrentDirectory(),
+                        "wwwroot/uploads"
+                    );
+
+                    if (!Directory.Exists(folder))
+                    {
+                        Directory.CreateDirectory(folder);
+                    }
+
+                    string fileName =
+                        Guid.NewGuid().ToString()
+                        + Path.GetExtension(uploadImage.FileName);
+
+                    string filePath = Path.Combine(folder, fileName);
+
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        uploadImage.CopyTo(stream);
+                    }
+
+                    post.ImageUrl = "/uploads/" + fileName;
+                }
+                else
+                {
+                    // Giữ ảnh cũ
+                    var oldPost = _context.Posts
+                        .AsNoTracking()
+                        .FirstOrDefault(p => p.Id == post.Id);
+
+                    if (oldPost != null)
+                    {
+                        post.ImageUrl = oldPost.ImageUrl;
+                    }
+                }
+
                 _context.Posts.Update(post);
 
                 _context.SaveChanges();

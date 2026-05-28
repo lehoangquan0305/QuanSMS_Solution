@@ -39,7 +39,7 @@
 
         <div class="card-body p-4">
 
-            <form method="post">
+            <<form method="post" enctype="multipart/form-data">
 
                 <input asp-for="Id" hidden />
 
@@ -87,8 +87,35 @@
                         Hình ảnh
                     </label>
 
-                    <input asp-for="ImageUrl"
-                           class="form-control" />
+                    <div class="mb-4">
+
+                        <label class="form-label fw-bold">
+                            Hình ảnh hiện tại
+                        </label>
+
+                        <br />
+
+                        <img src="@Model.ImageUrl"
+                             style="width:220px;
+                        height:140px;
+                        object-fit:cover;
+                        border-radius:12px;
+                        border:1px solid #ddd;
+                        margin-bottom:15px;" />
+
+                    </div>
+
+                    <div class="mb-4">
+
+                        <label class="form-label fw-bold">
+                            Chọn ảnh mới
+                        </label>
+
+                        <input type="file"
+                               name="uploadImage"
+                               class="form-control" />
+
+                    </div>
 
                 </div>
 
@@ -131,3 +158,18 @@
     </div>
 
 </div>
+@section Scripts {
+
+    <script src="https://cdn.ckeditor.com/ckeditor5/39.0.1/classic/ckeditor.js"></script>
+
+    <script>
+
+        ClassicEditor
+        .create(document.querySelector('#Content'))
+        .catch(error => {
+        console.error(error);
+        });
+
+    </script>
+
+}
