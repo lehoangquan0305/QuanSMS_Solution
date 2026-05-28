@@ -1,129 +1,271 @@
-﻿@{
-    ViewData["Title"] = "Trang Chủ";
+﻿@model IEnumerable<CMS.Data.Entities.Order>
+
+@{
+    ViewData["Title"] = "Dashboard";
 }
 
-<div class="container mt-5">
+<!-- STATS -->
+<div class="stats-grid">
 
-    <!-- Tiêu đề -->
-    <div class="text-center mb-5">
-        <h1 class="display-4 fw-bold text-primary">
-            HỆ THỐNG QUẢN LÝ CMS
-        </h1>
+    <div class="stats-card blue">
 
-        <p class="lead text-muted">
-            ASP.NET Core MVC + Entity Framework Core + SQL Server
-        </p>
+        <div>
+            <p>Tổng Bài Viết</p>
+            <h3>@ViewBag.TotalPosts</h3>
+        </div>
+
+        <span>📰</span>
+
     </div>
 
-    <!-- Dashboard -->
-    <div class="row g-4">
+    <div class="stats-card green">
 
-        <!-- Category -->
-        <div class="col-md-4">
-            <div class="card shadow-lg border-0 h-100">
-                <div class="card-body text-center">
-                    <h3 class="text-primary">Danh Mục</h3>
-
-                    <p class="text-muted">
-                        Quản lý các danh mục bài viết
-                    </p>
-
-                    <a href="/Category"
-                       class="btn btn-primary">
-                        Xem Danh Mục
-                    </a>
-                </div>
-            </div>
+        <div>
+            <p>Tổng Sản Phẩm</p>
+            <h3>@ViewBag.TotalProducts</h3>
         </div>
 
-        <!-- Post -->
-        <div class="col-md-4">
-            <div class="card shadow-lg border-0 h-100">
-                <div class="card-body text-center">
-                    <h3 class="text-success">Bài Viết</h3>
+        <span>🛒</span>
 
-                    <p class="text-muted">
-                        Quản lý nội dung bài viết
-                    </p>
+    </div>
 
-                    <a href="/Post"
-                       class="btn btn-success">
-                        Xem Bài Viết
-                    </a>
-                </div>
-            </div>
+    <div class="stats-card orange">
+
+        <div>
+            <p>Khách Hàng</p>
+            <h3>@ViewBag.TotalCustomers</h3>
         </div>
 
-        <!-- User -->
-        <div class="col-md-4">
-            <div class="card shadow-lg border-0 h-100">
-                <div class="card-body text-center">
-                    <h3 class="text-danger">Người Dùng</h3>
+        <span>👥</span>
 
-                    <p class="text-muted">
-                        Quản lý tài khoản hệ thống
-                    </p>
+    </div>
 
-                    <a href="/User"
-                       class="btn btn-danger">
-                        Xem Người Dùng
-                    </a>
-                </div>
-            </div>
+    <div class="stats-card red">
+
+        <div>
+            <p>Đơn Hàng</p>
+            <h3>@ViewBag.TotalOrders</h3>
         </div>
 
-        <!-- Product -->
-        <div class="col-md-4">
-            <div class="card shadow-lg border-0 h-100">
-                <div class="card-body text-center">
-                    <h3 class="text-warning">Sản Phẩm</h3>
+        <span>📦</span>
 
-                    <p class="text-muted">
-                        Quản lý sản phẩm website
-                    </p>
+    </div>
 
-                    <a href="/Product"
-                       class="btn btn-warning text-white">
-                        Xem Sản Phẩm
-                    </a>
-                </div>
+</div>
+
+<!-- CONTENT -->
+<div class="content-grid">
+
+    <!-- LEFT -->
+    <div class="left-content">
+
+        <!-- QUICK ACTION -->
+        <div class="dashboard-card">
+
+            <div class="card-header-custom">
+                <h4>⚡ Truy cập nhanh</h4>
             </div>
+
+            <div class="quick-actions">
+
+                <a href="/Post/Create"
+                   class="action-btn primary">
+                    + Thêm bài viết
+                </a>
+
+                <a href="/Product/Create"
+                   class="action-btn success">
+                    + Thêm sản phẩm
+                </a>
+
+                <a href="/Order"
+                   class="action-btn dark">
+                    Xem đơn hàng
+                </a>
+
+            </div>
+
         </div>
 
-        <!-- Customer -->
-        <div class="col-md-4">
-            <div class="card shadow-lg border-0 h-100">
-                <div class="card-body text-center">
-                    <h3 class="text-info">Khách Hàng</h3>
+        <!-- TABLE -->
+        <div class="dashboard-card mt-4">
 
-                    <p class="text-muted">
-                        Quản lý thông tin khách hàng
-                    </p>
+            <div class="card-header-custom d-flex justify-content-between align-items-center">
 
-                    <a href="/Customer"
-                       class="btn btn-info text-white">
-                        Xem Khách Hàng
-                    </a>
-                </div>
+                <h4>📋 Đơn hàng gần đây</h4>
+
+                <a href="/Order"
+                   class="btn btn-sm btn-primary">
+                    Xem tất cả
+                </a>
+
             </div>
+
+            <div class="table-responsive">
+
+                <table class="table modern-table align-middle">
+
+                    <thead>
+
+                        <tr>
+                            <th>Mã ĐH</th>
+                            <th>Khách Hàng</th>
+                            <th>Ngày Đặt</th>
+                            <th>Trạng Thái</th>
+                            <th>Ghi Chú</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        @if (Model != null && Model.Any())
+                        {
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+
+                                    <td>
+                                        <strong>#@item.Id</strong>
+                                    </td>
+
+                                    <td>
+                                        KH @item.CustomerId
+                                    </td>
+
+                                    <td>
+                                        @item.OrderDate.ToString("dd/MM/yyyy")
+                                    </td>
+
+                                    <td>
+
+                                        @if (item.Status == 0)
+                                        {
+                                            <span class="badge bg-success">
+                                                Đang xử lý
+                                            </span>
+                                        }
+                                        else if (item.Status == 1)
+                                        {
+                                            <span class="badge bg-warning text-dark">
+                                                Hoàn thành
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-danger">
+                                                Đã hủy
+                                            </span>
+                                        }
+
+                                    </td>
+
+                                    <td>
+                                        @item.Notes
+                                    </td>
+
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+
+                                <td colspan="5"
+                                    class="text-center text-muted py-4">
+
+                                    Không có dữ liệu đơn hàng
+
+                                </td>
+
+                            </tr>
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
         </div>
 
-        <!-- Order -->
-        <div class="col-md-4">
-            <div class="card shadow-lg border-0 h-100">
-                <div class="card-body text-center">
-                    <h3 class="text-dark">Đơn Hàng</h3>
+    </div>
 
-                    <p class="text-muted">
-                        Theo dõi và xử lý đơn hàng
+    <!-- RIGHT -->
+    <div class="right-content">
+
+        <!-- NOTIFICATION -->
+        <div class="dashboard-card">
+
+            <div class="card-header-custom">
+                <h4>🔔 Thông báo</h4>
+            </div>
+
+            <div class="notification-list">
+
+                <div class="notify success">
+
+                    <h6>Tổng đơn hàng</h6>
+
+                    <p>
+                        Hiện có @ViewBag.TotalOrders đơn hàng
                     </p>
 
-                    <a href="/Order"
-                       class="btn btn-dark">
-                        Xem Đơn Hàng
-                    </a>
                 </div>
+
+                <div class="notify warning">
+
+                    <h6>Tổng sản phẩm</h6>
+
+                    <p>
+                        Hiện có @ViewBag.TotalProducts sản phẩm
+                    </p>
+
+                </div>
+
+                <div class="notify info">
+
+                    <h6>Tổng khách hàng</h6>
+
+                    <p>
+                        Hiện có @ViewBag.TotalCustomers khách hàng
+                    </p>
+
+                </div>
+
             </div>
+
+        </div>
+
+        <!-- ACTIVITY -->
+        <div class="dashboard-card mt-4">
+
+            <div class="card-header-custom">
+                <h4>📈 Hoạt động</h4>
+            </div>
+
+            <ul class="activity-list">
+
+                <li>
+                    <span class="dot green"></span>
+                    Tổng bài viết:
+                    <strong>@ViewBag.TotalPosts</strong>
+                </li>
+
+                <li>
+                    <span class="dot blue"></span>
+                    Tổng sản phẩm:
+                    <strong>@ViewBag.TotalProducts</strong>
+                </li>
+
+                <li>
+                    <span class="dot red"></span>
+                    Tổng đơn hàng:
+                    <strong>@ViewBag.TotalOrders</strong>
+                </li>
+
+            </ul>
+
         </div>
 
     </div>

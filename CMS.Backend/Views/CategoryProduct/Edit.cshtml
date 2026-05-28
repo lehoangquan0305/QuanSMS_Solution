@@ -1,0 +1,64 @@
+﻿@model CMS.Data.Entities.CategoryProduct
+
+<div class="container mt-5">
+
+    <div class="card shadow-lg border-0 rounded-4">
+
+        <div class="card-header bg-warning py-3">
+
+            <h3 class="mb-0">
+                ✏ CHỈNH SỬA DANH MỤC
+            </h3>
+
+        </div>
+
+        <div class="card-body p-4">
+
+            <form method="post">
+
+                <input asp-for="Id" hidden />
+
+                <div class="mb-4">
+
+                    <label class="form-label fw-bold">
+                        Tên danh mục
+                    </label>
+
+                    <input asp-for="Name"
+                           class="form-control form-control-lg" />
+
+                </div>
+
+                <div class="mb-4">
+
+                    <label class="form-label fw-bold">
+                        Mô tả
+                    </label>
+
+                    <textarea asp-for="Description"
+                              class="form-control"
+                              rows="5"></textarea>
+
+                </div>
+
+                <button type="submit"
+                        class="btn btn-warning btn-lg px-4">
+
+                    💾 Cập nhật
+
+                </button>
+
+                <a href="/CategoryProduct"
+                   class="btn btn-secondary btn-lg px-4">
+
+                    Hủy
+
+                </a>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
