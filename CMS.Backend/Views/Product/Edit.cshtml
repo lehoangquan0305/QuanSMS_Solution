@@ -1,0 +1,174 @@
+﻿@model CMS.Data.Entities.Product
+
+@{
+    ViewData["Title"] = "Chỉnh Sửa Sản Phẩm";
+}
+
+<div class="container mt-5">
+
+    <!-- HEADER -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+
+            <h2 class="fw-bold text-warning">
+                ✏ CHỈNH SỬA SẢN PHẨM
+            </h2>
+
+            <p class="text-muted">
+                Cập nhật thông tin sản phẩm
+            </p>
+
+        </div>
+
+        <a href="/Product"
+           class="btn btn-outline-secondary shadow-sm">
+
+            ↩ Quay lại
+
+        </a>
+
+    </div>
+
+    <!-- CARD -->
+    <div class="card border-0 shadow-lg rounded-4">
+
+        <!-- HEADER -->
+        <div class="card-header bg-warning py-3 rounded-top-4">
+
+            <h4 class="mb-0 fw-semibold text-dark">
+                🛒 Thông tin sản phẩm
+            </h4>
+
+        </div>
+
+        <!-- BODY -->
+        <div class="card-body p-4">
+
+            <form method="post">
+
+                <input asp-for="Id" hidden />
+
+                <!-- NAME -->
+                <div class="mb-4">
+
+                    <label class="form-label fw-bold">
+                        Tên sản phẩm
+                    </label>
+
+                    <input asp-for="Name"
+                           class="form-control form-control-lg" />
+
+                </div>
+
+                <!-- CATEGORY -->
+                <div class="mb-4">
+
+                    <label class="form-label fw-bold">
+                        Danh mục sản phẩm
+                    </label>
+
+                    <select asp-for="CategoryProductId"
+                            class="form-select form-select-lg">
+
+                        <option value="">
+                            -- Chọn danh mục --
+                        </option>
+
+                        @foreach (var item in ViewBag.CategoryList)
+                        {
+                            <option value="@item.Id">
+                                @item.Name
+                            </option>
+                        }
+
+                    </select>
+
+                </div>
+
+                <!-- PRICE -->
+                <div class="mb-4">
+
+                    <label class="form-label fw-bold">
+                        Giá sản phẩm
+                    </label>
+
+                    <input asp-for="Price"
+                           class="form-control form-control-lg" />
+
+                </div>
+
+                <!-- STOCK -->
+                <div class="mb-4">
+
+                    <label class="form-label fw-bold">
+                        Số lượng tồn kho
+                    </label>
+
+                    <input asp-for="StockQuantity"
+                           class="form-control form-control-lg" />
+
+                </div>
+
+                <!-- IMAGE -->
+                <div class="mb-4">
+
+                    <label class="form-label fw-bold">
+                        Hình ảnh
+                    </label>
+
+                    <input asp-for="ImageUrl"
+                           class="form-control" />
+
+                </div>
+
+                @if (!string.IsNullOrEmpty(Model.ImageUrl))
+                {
+                    <div class="mb-4">
+
+                        <img src="@Model.ImageUrl"
+                             width="200"
+                             class="rounded shadow" />
+
+                    </div>
+                }
+
+                <!-- DESCRIPTION -->
+                <div class="mb-4">
+
+                    <label class="form-label fw-bold">
+                        Mô tả sản phẩm
+                    </label>
+
+                    <textarea asp-for="Description"
+                              class="form-control"
+                              rows="6"></textarea>
+
+                </div>
+
+                <!-- BUTTON -->
+                <div class="d-flex gap-2">
+
+                    <button type="submit"
+                            class="btn btn-warning btn-lg px-4 shadow-sm">
+
+                        💾 Cập nhật
+
+                    </button>
+
+                    <a href="/Product"
+                       class="btn btn-secondary btn-lg px-4">
+
+                        Hủy
+
+                    </a>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
