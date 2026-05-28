@@ -10,6 +10,7 @@
     <div class="d-flex justify-content-between align-items-center mb-4">
 
         <div>
+
             <h2 class="fw-bold text-success mb-1">
                 ➕ THÊM DANH MỤC
             </h2>
@@ -17,11 +18,14 @@
             <p class="text-muted">
                 Tạo mới danh mục cho hệ thống CMS
             </p>
+
         </div>
 
-        <a href="/Category"
+        <a asp-action="Index"
            class="btn btn-outline-secondary shadow-sm">
+
             ↩ Quay lại
+
         </a>
 
     </div>
@@ -41,13 +45,14 @@
         <!-- CARD BODY -->
         <div class="card-body p-4">
 
-            <form method="post">
+            <form asp-action="Create"
+                  method="post">
 
                 <!-- NAME -->
                 <div class="mb-4">
 
-                    <label class="form-label fw-bold">
-                        Tên danh mục
+                    <label asp-for="Name"
+                           class="form-label fw-bold">
                     </label>
 
                     <input asp-for="Name"
@@ -55,21 +60,23 @@
                            placeholder="Ví dụ: Công Nghệ, Giáo Dục..." />
 
                     <span asp-validation-for="Name"
-                          class="text-danger"></span>
+                          class="text-danger">
+                    </span>
 
                 </div>
 
                 <!-- DESCRIPTION -->
                 <div class="mb-4">
 
-                    <label class="form-label fw-bold">
-                        Mô tả
+                    <label asp-for="Description"
+                           class="form-label fw-bold">
                     </label>
 
                     <textarea asp-for="Description"
                               class="form-control"
                               rows="5"
-                              placeholder="Nhập mô tả cho danh mục..."></textarea>
+                              placeholder="Nhập mô tả cho danh mục...">
+                    </textarea>
 
                 </div>
 
@@ -83,7 +90,7 @@
 
                     </button>
 
-                    <a href="/Category"
+                    <a asp-action="Index"
                        class="btn btn-secondary btn-lg px-4">
 
                         Hủy
@@ -101,7 +108,9 @@
 </div>
 
 @section Scripts {
+
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
+
 }

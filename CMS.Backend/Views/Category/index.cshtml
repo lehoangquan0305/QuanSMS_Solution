@@ -10,31 +10,36 @@
     <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap">
 
         <div>
+
             <h2 class="fw-bold text-primary mb-1">
                 📂 QUẢN LÝ DANH MỤC
             </h2>
 
             <p class="text-muted">
                 Tổng số danh mục:
+
                 <span class="badge bg-primary">
                     @Model.Count()
                 </span>
             </p>
+
         </div>
 
         <div class="d-flex gap-2">
 
-            <!-- Search -->
+            <!-- SEARCH -->
             <input type="text"
                    id="searchInput"
                    class="form-control"
                    placeholder="🔍 Tìm danh mục..."
-                   style="width:250px;">
+                   style="width:250px;" />
 
-            <!-- Button Add -->
-            <a href="/Category/Create"
+            <!-- ADD -->
+            <a asp-action="Create"
                class="btn btn-success shadow-sm">
-                + Thêm danh mục
+
+                ➕ Thêm danh mục
+
             </a>
 
         </div>
@@ -54,12 +59,20 @@
                     <thead class="table-dark">
 
                         <tr>
+
                             <th width="80">ID</th>
+
                             <th>Tên Danh Mục</th>
+
                             <th>Mô Tả</th>
-                            <th width="200" class="text-center">
+
+                            <th width="220"
+                                class="text-center">
+
                                 Thao Tác
+
                             </th>
+
                         </tr>
 
                     </thead>
@@ -72,12 +85,16 @@
                             {
                                 <tr>
 
+                                    <!-- ID -->
                                     <td>
+
                                         <span class="badge bg-secondary">
                                             #@item.Id
                                         </span>
+
                                     </td>
 
+                                    <!-- NAME -->
                                     <td>
 
                                         <div class="fw-bold text-primary">
@@ -86,6 +103,7 @@
 
                                     </td>
 
+                                    <!-- DESCRIPTION -->
                                     <td>
 
                                         <span class="text-muted">
@@ -94,17 +112,26 @@
 
                                     </td>
 
+                                    <!-- ACTION -->
                                     <td class="text-center">
 
-                                        <a href="/Category/Edit/@item.Id"
+                                        <!-- EDIT -->
+                                        <a asp-action="Edit"
+                                           asp-route-id="@item.Id"
                                            class="btn btn-sm btn-warning text-white shadow-sm">
+
                                             ✏ Sửa
+
                                         </a>
 
-                                        <a href="/Category/Delete/@item.Id"
+                                        <!-- DELETE -->
+                                        <a asp-action="Delete"
+                                           asp-route-id="@item.Id"
                                            class="btn btn-sm btn-danger shadow-sm"
                                            onclick="return confirm('Bạn chắc chắn muốn xóa danh mục này?')">
+
                                             🗑 Xóa
+
                                         </a>
 
                                     </td>
@@ -116,7 +143,8 @@
                         {
                             <tr>
 
-                                <td colspan="4" class="text-center py-5">
+                                <td colspan="4"
+                                    class="text-center py-5">
 
                                     <h5 class="text-muted">
                                         Không có danh mục nào 😢
@@ -139,25 +167,30 @@
 
 </div>
 
-<!-- SEARCH SCRIPT -->
+<!-- SEARCH -->
 <script>
 
-    const searchInput = document.getElementById("searchInput");
+    const searchInput =
+        document.getElementById("searchInput");
 
     searchInput.addEventListener("keyup", function () {
 
-        const filter = this.value.toLowerCase();
+        const filter =
+            this.value.toLowerCase();
 
-        const rows = document.querySelectorAll("#categoryTable tbody tr");
+        const rows =
+            document.querySelectorAll("#categoryTable tbody tr");
 
         rows.forEach(row => {
 
-            const text = row.innerText.toLowerCase();
+            const text =
+                row.innerText.toLowerCase();
 
             row.style.display =
                 text.includes(filter)
                     ? ""
                     : "none";
+
         });
 
     });

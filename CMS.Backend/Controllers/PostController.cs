@@ -2,7 +2,6 @@
 using CMS.Data.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace CMS.Backend.Controllers
 {
@@ -16,14 +15,28 @@ namespace CMS.Backend.Controllers
         }
 
         // =========================
-        // DANH SÁCH
+        // DANH SÁCH + LỌC THEO DANH MỤC
         // =========================
-        public IActionResult Index()
+        public IActionResult Index(int? id)
         {
-            var posts = _context.Posts
-    .Include(p => p.Category)
-    .OrderByDescending(p => p.CreatedDate)
-    .ToList();
+            // Query gốc
+            var query = _context.Posts
+                .Include(p => p.Category)
+                .OrderByDescending(p => p.CreatedDate)
+                .AsQueryable();
+
+            // Nếu có id => lọc theo danh mục
+            if (id != null)
+            {
+                query = (IOrderedQueryable<Post>)query
+                    .Where(p => p.CategoryId == id);
+            }
+
+            // Thực thi query
+            var posts = query.ToList();
+
+            // Gửi id ra View để biết đang lọc danh mục nào
+            ViewBag.CategoryId = id;
 
             return View(posts);
         }
@@ -34,8 +47,8 @@ namespace CMS.Backend.Controllers
         public IActionResult Details(int id)
         {
             var post = _context.Posts
-    .Include(p => p.Category)
-    .FirstOrDefault(p => p.Id == id);
+                .Include(p => p.Category)
+                .FirstOrDefault(p => p.Id == id);
 
             if (post == null)
             {
@@ -61,13 +74,20 @@ namespace CMS.Backend.Controllers
         [HttpPost]
         public IActionResult Create(Post post)
         {
-            post.CreatedDate = DateTime.Now;
+            if (ModelState.IsValid)
+            {
+                post.CreatedDate = DateTime.Now;
 
-            _context.Posts.Add(post);
+                _context.Posts.Add(post);
 
-            _context.SaveChanges();
+                _context.SaveChanges();
 
-            return RedirectToAction("Index");
+                return RedirectToAction("Index");
+            }
+
+            ViewBag.CategoryList = _context.Categories.ToList();
+
+            return View(post);
         }
 
         // =========================
@@ -93,11 +113,18 @@ namespace CMS.Backend.Controllers
         [HttpPost]
         public IActionResult Edit(Post post)
         {
-            _context.Posts.Update(post);
+            if (ModelState.IsValid)
+            {
+                _context.Posts.Update(post);
 
-            _context.SaveChanges();
+                _context.SaveChanges();
 
-            return RedirectToAction("Index");
+                return RedirectToAction("Index");
+            }
+
+            ViewBag.CategoryList = _context.Categories.ToList();
+
+            return View(post);
         }
 
         // =========================
