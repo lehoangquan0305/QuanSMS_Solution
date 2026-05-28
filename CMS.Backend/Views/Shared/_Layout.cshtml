@@ -1,50 +1,558 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - CMS.Backend</title>
-    <script type="importmap"></script>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/CMS.Backend.styles.css" asp-append-version="true" />
+
+    <title>@ViewData["Title"] - CMS Admin</title>
+
+    <link rel="stylesheet"
+          href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+          rel="stylesheet">
+
+    <style>
+
+            * {
+                font-family: 'Inter', sans-serif;
+            }
+
+            body {
+                margin: 0;
+                background: #f1f5f9;
+            }
+
+            .admin-wrapper {
+                display: flex;
+                min-height: 100vh;
+            }
+
+            /* SIDEBAR */
+
+            .sidebar {
+                width: 270px;
+                background: #0f172a;
+                color: white;
+                position: fixed;
+                height: 100vh;
+                padding: 24px;
+                overflow-y: auto;
+            }
+
+            .sidebar-logo {
+                display: flex;
+                align-items: center;
+                gap: 14px;
+                margin-bottom: 40px;
+            }
+
+            .logo-icon {
+                width: 55px;
+                height: 55px;
+                border-radius: 18px;
+                background: linear-gradient(135deg,#3b82f6,#06b6d4);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-weight: bold;
+                font-size: 18px;
+            }
+
+            .sidebar-menu {
+                list-style: none;
+                padding: 0;
+            }
+
+                .sidebar-menu li {
+                    margin-bottom: 10px;
+                }
+
+                .sidebar-menu a {
+                    display: flex;
+                    align-items: center;
+                    gap: 12px;
+                    text-decoration: none;
+                    color: #d1d5db;
+                    padding: 14px 18px;
+                    border-radius: 14px;
+                    transition: .3s;
+                    font-weight: 500;
+                }
+
+                    .sidebar-menu a:hover {
+                        background: #1e293b;
+                        color: white;
+                        transform: translateX(5px);
+                    }
+
+                    .sidebar-menu a.active {
+                        background: linear-gradient(135deg,#2563eb,#06b6d4);
+                        color: white;
+                    }
+
+            .sidebar-footer {
+                border-top: 1px solid #334155;
+                padding-top: 20px;
+                margin-top: 30px;
+            }
+
+            .admin-user {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+            }
+
+                .admin-user img {
+                    width: 45px;
+                    height: 45px;
+                    border-radius: 50%;
+                }
+
+            /* MAIN */
+
+            .main-content {
+                margin-left: 270px;
+                flex: 1;
+                padding: 35px;
+            }
+
+            .topbar {
+                background: white;
+                border-radius: 24px;
+                padding: 24px 30px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 30px;
+                box-shadow: 0 10px 30px rgba(0,0,0,.05);
+            }
+
+            .topbar-right {
+                display: flex;
+                gap: 16px;
+                align-items: center;
+            }
+
+            .search-box input {
+                border: none;
+                background: #f3f4f6;
+                padding: 12px 18px;
+                border-radius: 14px;
+                width: 240px;
+                outline: none;
+            }
+
+            .notification-btn {
+                border: none;
+                background: #eff6ff;
+                width: 50px;
+                height: 50px;
+                border-radius: 14px;
+            }
+
+            .dashboard-card {
+                background: white;
+                border-radius: 24px;
+                padding: 24px;
+                box-shadow: 0 10px 30px rgba(0,0,0,.05);
+            }
+            /* STATS */
+
+            .stats-grid {
+                display: grid;
+                grid-template-columns: repeat(4,1fr);
+                gap: 24px;
+                margin-bottom: 30px;
+            }
+
+            .stats-card {
+                padding: 26px;
+                border-radius: 24px;
+                color: white;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                box-shadow: 0 15px 30px rgba(0,0,0,.08);
+                transition: .3s;
+            }
+
+                .stats-card:hover {
+                    transform: translateY(-5px);
+                }
+
+                .stats-card h3 {
+                    font-size: 36px;
+                    font-weight: bold;
+                }
+
+                .stats-card span {
+                    font-size: 50px;
+                }
+
+            .blue {
+                background: linear-gradient(135deg,#3b82f6,#2563eb);
+            }
+
+            .green {
+                background: linear-gradient(135deg,#10b981,#059669);
+            }
+
+            .orange {
+                background: linear-gradient(135deg,#f59e0b,#d97706);
+            }
+
+            .red {
+                background: linear-gradient(135deg,#ef4444,#dc2626);
+            }
+
+            /* CONTENT */
+
+            .content-grid {
+                display: grid;
+                grid-template-columns: 2fr 1fr;
+                gap: 24px;
+            }
+
+            .dashboard-card {
+                background: white;
+                border-radius: 24px;
+                padding: 24px;
+                box-shadow: 0 10px 30px rgba(0,0,0,.05);
+            }
+
+            .card-header-custom {
+                margin-bottom: 20px;
+            }
+
+                .card-header-custom h4 {
+                    font-weight: bold;
+                }
+
+            /* QUICK ACTION */
+
+            .quick-actions {
+                display: grid;
+                grid-template-columns: repeat(3,1fr);
+                gap: 16px;
+            }
+
+            .action-btn {
+                padding: 18px;
+                border-radius: 18px;
+                text-align: center;
+                text-decoration: none;
+                color: white;
+                font-weight: bold;
+                transition: .3s;
+                box-shadow: 0 10px 20px rgba(0,0,0,.08);
+            }
+
+                .action-btn:hover {
+                    transform: translateY(-3px);
+                    color: white;
+                }
+
+            .primary {
+                background: linear-gradient(135deg,#3b82f6,#2563eb);
+            }
+
+            .success {
+                background: linear-gradient(135deg,#10b981,#059669);
+            }
+
+            .dark {
+                background: linear-gradient(135deg,#111827,#1f2937);
+            }
+
+            /* TABLE */
+
+            .modern-table thead {
+                background: #f9fafb;
+            }
+
+            .modern-table th {
+                border: none;
+                padding: 16px;
+            }
+
+            .modern-table td {
+                padding: 16px;
+                border-top: 1px solid #f3f4f6;
+            }
+
+            .modern-table tbody tr:hover {
+                background: #f8fafc;
+                transition: .2s;
+            }
+
+            /* NOTIFICATION */
+
+            .notification-list {
+                display: flex;
+                flex-direction: column;
+                gap: 16px;
+            }
+
+            .notify {
+                padding: 16px;
+                border-radius: 18px;
+            }
+
+                .notify h6 {
+                    margin-bottom: 6px;
+                    font-weight: bold;
+                }
+
+                .notify p {
+                    margin: 0;
+                    font-size: 14px;
+                }
+
+                .notify.success {
+                    background: #ecfdf5;
+                    color: #065f46;
+                }
+
+                .notify.warning {
+                    background: #fffbeb;
+                    color: #92400e;
+                }
+
+                .notify.info {
+                    background: #eff6ff;
+                    color: #1e40af;
+                }
+
+            /* ACTIVITY */
+
+            .activity-list {
+                list-style: none;
+                padding: 0;
+                margin: 0;
+            }
+
+                .activity-list li {
+                    display: flex;
+                    align-items: center;
+                    gap: 10px;
+                    margin-bottom: 16px;
+                    font-size: 15px;
+                }
+
+            .dot {
+                width: 12px;
+                height: 12px;
+                border-radius: 50%;
+            }
+
+                .dot.green {
+                    background: #10b981;
+                }
+
+                .dot.blue {
+                    background: #3b82f6;
+                }
+
+                .dot.red {
+                    background: #ef4444;
+                }
+
+            /* RESPONSIVE */
+
+            @@media(max-width:992px) {
+
+                .sidebar {
+                    display: none;
+                }
+
+                .main-content {
+                    margin-left: 0;
+                }
+
+                .stats-grid {
+                    grid-template-columns: repeat(2,1fr);
+                }
+
+                .content-grid {
+                    grid-template-columns: 1fr;
+                }
+            }
+
+            @@media(max-width:768px) {
+
+                .stats-grid {
+                    grid-template-columns: 1fr;
+                }
+
+                .quick-actions {
+                    grid-template-columns: 1fr;
+                }
+
+                .topbar {
+                    flex-direction: column;
+                    gap: 20px;
+                    align-items: flex-start;
+                }
+
+                .search-box input {
+                    width: 100%;
+                }
+            }
+
+    </style>
+
 </head>
+
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">CMS.Backend</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
+
+    <div class="admin-wrapper">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+
+            <div>
+
+                <div class="sidebar-logo">
+
+                    <div class="logo-icon">
+                        CMS
+                    </div>
+
+                    <div>
+                        <h3>CMS ADMIN</h3>
+                        <p>Management System</p>
+                    </div>
+
                 </div>
+
+                <ul class="sidebar-menu">
+
+                    <li>
+                        <a href="/"
+                           class="@(Context.Request.Path == "/" ? "active" : "")">
+                            📊 Dashboard
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="/Category"
+                           class="@(Context.Request.Path.StartsWithSegments("/Category") ? "active" : "")">
+                            📂 Danh Mục
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="/Post"
+                           class="@(Context.Request.Path.StartsWithSegments("/Post") ? "active" : "")">
+                            📰 Bài Viết
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="/User"
+                           class="@(Context.Request.Path.StartsWithSegments("/User") ? "active" : "")">
+                            👤 Người Dùng
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="/CategoryProduct"
+                           class="@(Context.Request.Path.StartsWithSegments("/CategoryProduct") ? "active" : "")">
+                            🏷️ Danh Mục SP
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="/Product"
+                           class="@(Context.Request.Path.StartsWithSegments("/Product") ? "active" : "")">
+                            🛒 Sản Phẩm
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="/Customer"
+                           class="@(Context.Request.Path.StartsWithSegments("/Customer") ? "active" : "")">
+                            👥 Khách Hàng
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="/Order"
+                           class="@(Context.Request.Path.StartsWithSegments("/Order") ? "active" : "")">
+                            📦 Đơn Hàng
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="/OrderDetail"
+                           class="@(Context.Request.Path.StartsWithSegments("/OrderDetail") ? "active" : "")">
+                            🧾 Chi Tiết Đơn
+                        </a>
+                    </li>
+
+                </ul>
+
             </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
+
+            <div class="sidebar-footer">
+
+                <div class="admin-user">
+
+                    <img src="https://i.pravatar.cc/100" />
+
+                    <div>
+                        <h6>Administrator</h6>
+                        <small>Online</small>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </aside>
+
+        <!-- MAIN -->
+        <main class="main-content">
+
+            <!-- TOPBAR -->
+            <div class="topbar">
+
+                <div>
+                    <h1 class="fw-bold">
+                        @ViewData["Title"]
+                    </h1>
+
+                    <p class="text-muted mb-0">
+                        Xin chào Admin 👋
+                    </p>
+                </div>
+
+                <div class="topbar-right">
+
+                    <div class="search-box">
+                        <input type="text"
+                               placeholder="Tìm kiếm..." />
+                    </div>
+
+                    <button class="notification-btn">
+                        🔔
+                    </button>
+
+                </div>
+
+            </div>
+
             @RenderBody()
+
         </main>
+
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2026 - CMS.Backend - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
+
     @await RenderSectionAsync("Scripts", required: false)
+
 </body>
 </html>

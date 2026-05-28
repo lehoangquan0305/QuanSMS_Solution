@@ -1,0 +1,101 @@
+﻿@model IEnumerable<CMS.Data.Entities.Order>
+
+@{
+    ViewData["Title"] = "Quản Lý Đơn Hàng";
+}
+
+<div class="container mt-4">
+
+    <!-- HEADER -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+            <h2 class="fw-bold text-primary">
+                📦 QUẢN LÝ ĐƠN HÀNG
+            </h2>
+
+            <p class="text-muted">
+                Danh sách đơn hàng của khách hàng
+            </p>
+        </div>
+
+    </div>
+
+    <!-- CARD -->
+    <div class="card shadow-lg border-0 rounded-4">
+
+        <div class="card-body">
+
+            <div class="table-responsive">
+
+                <table class="table table-hover align-middle">
+
+                    <thead class="table-dark">
+
+                        <tr>
+                            <th>ID</th>
+                            <th>Ngày Đặt</th>
+                            <th>Khách Hàng</th>
+                            <th>Trạng Thái</th>
+                            <th>Ghi Chú</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+
+                                <td>
+                                    <strong>#@item.Id</strong>
+                                </td>
+
+                                <td>
+                                    @item.OrderDate.ToString("dd/MM/yyyy")
+                                </td>
+
+                                <td>
+                                    @(item.Customer != null ? item.Customer.FullName : "Không có")
+                                </td>
+
+                                <td>
+                                    @if (item.Status == 0)
+                                    {
+                                        <span class="badge bg-warning text-dark">
+                                            Chờ duyệt
+                                        </span>
+                                    }
+                                    else if (item.Status == 1)
+                                    {
+                                        <span class="badge bg-info">
+                                            Đang giao
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-success">
+                                            Hoàn thành
+                                        </span>
+                                    }
+                                </td>
+
+                                <td>
+                                    @item.Notes
+                                </td>
+
+                            </tr>
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
