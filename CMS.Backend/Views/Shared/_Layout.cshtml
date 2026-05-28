@@ -498,16 +498,56 @@
 
             <div class="sidebar-footer">
 
-                <div class="admin-user">
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <div class="admin-user d-flex align-items-center gap-3">
 
-                    <img src="https://i.pravatar.cc/100" />
+                        <!-- Avatar -->
+                        <img src="https://i.pravatar.cc/100?u=@User.Identity.Name"
+                             style="width:45px;height:45px;border-radius:50%;border:2px solid #3b82f6;" />
 
-                    <div>
-                        <h6>Administrator</h6>
-                        <small>Online</small>
+                        <!-- Info -->
+                        <div class="flex-grow-1">
+                            <h6 class="mb-0 text-white fw-semibold">
+                                @User.FindFirst("FullName")?.Value
+                            </h6>
+
+                            <small class="text-muted">
+                                @User.Identity.Name
+                            </small>
+
+                            <div class="mt-1">
+                                <span class="badge bg-primary">
+                                    @User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value
+                                </span>
+                            </div>
+                        </div>
+
                     </div>
 
-                </div>
+                    <!-- Logout -->
+                    <div class="mt-3">
+                        <a asp-controller="Account"
+                           asp-action="Logout"
+                           class="btn btn-danger btn-sm w-100 fw-semibold"
+                           style="border-radius:12px;">
+                            🚪 Đăng xuất
+                        </a>
+                    </div>
+                }
+                else
+                {
+                    <div class="text-center text-muted mb-2">
+                        <small>Chưa đăng nhập</small>
+                    </div>
+
+                    <a asp-controller="Account"
+                       asp-action="Login"
+                       class="btn btn-primary btn-sm w-100 fw-semibold"
+                       style="border-radius:12px;">
+                        🔐 Đăng nhập
+                    </a>
+                }
 
             </div>
 
