@@ -1,0 +1,44 @@
+﻿@model CMS.Data.Entities.Post
+
+<div class="container mt-5">
+
+    <div class="card border-0 shadow-lg overflow-hidden">
+
+        <img src="@Model.ImageUrl"
+             class="img-fluid"
+             style="max-height:500px; object-fit:cover; width:100%;">
+
+        <div class="card-body p-5">
+
+            <h1 class="display-5 fw-bold text-primary mb-3">
+                @Model.Title
+            </h1>
+
+            <p class="text-muted mb-4">
+                📅 Đăng ngày:
+                @Model.CreatedDate.ToString("dd/MM/yyyy HH:mm")
+            </p>
+
+            <div class="fs-5 text-dark lh-lg">
+                @Model.Content
+            </div>
+
+            <div class="mt-5">
+
+                <a href="/Post"
+                   class="btn btn-secondary">
+                    ← Quay lại
+                </a>
+
+                <a href="/Post/Edit/@Model.Id"
+                   class="btn btn-warning text-white">
+                    ✏ Chỉnh sửa
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

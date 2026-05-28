@@ -1,0 +1,57 @@
+﻿@model CMS.Data.Entities.User
+
+<div class="container mt-4">
+
+    <div class="card shadow-lg border-0">
+
+        <div class="card-header bg-success text-white">
+            <h3>THÊM THÀNH VIÊN</h3>
+        </div>
+
+        <div class="card-body">
+
+            <form method="post">
+
+                <div class="mb-3">
+                    <label>Tên đăng nhập</label>
+                    <input asp-for="Username" class="form-control" />
+                </div>
+
+                <div class="mb-3">
+                    <label>Họ và tên</label>
+                    <input asp-for="FullName" class="form-control" />
+                </div>
+
+                <div class="mb-3">
+                    <label>Quyền hạn</label>
+
+                    <select asp-for="Role" class="form-select">
+                        <option>Administrator</option>
+                        <option>Editor</option>
+                        <option>Author</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label>Mật khẩu</label>
+                    <input asp-for="PasswordHash"
+                           type="password"
+                           class="form-control" />
+                </div>
+
+                <button class="btn btn-success">
+                    Lưu dữ liệu
+                </button>
+
+                <a href="/User"
+                   class="btn btn-secondary">
+                    Quay lại
+                </a>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>

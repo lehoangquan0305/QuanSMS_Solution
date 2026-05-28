@@ -1,0 +1,119 @@
+﻿@model IEnumerable<CMS.Data.Entities.User>
+
+@{
+    ViewData["Title"] = "Quản Lý Thành Viên";
+}
+
+<div class="container mt-4">
+
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold text-dark">
+                QUẢN LÝ THÀNH VIÊN
+            </h2>
+
+            <p class="text-muted mb-0">
+                Danh sách tài khoản quản trị hệ thống
+            </p>
+        </div>
+
+        <a href="/User/Create"
+           class="btn btn-success shadow-sm">
+            + Thêm thành viên mới
+        </a>
+    </div>
+
+    <!-- Card -->
+    <div class="card border-0 shadow-lg">
+
+        <div class="card-body">
+
+            <div class="table-responsive">
+
+                <table class="table table-hover align-middle">
+
+                    <thead class="table-dark">
+                        <tr>
+                            <th width="80">ID</th>
+                            <th>Tên Đăng Nhập</th>
+                            <th>Họ Và Tên</th>
+                            <th width="150">Quyền Hạn</th>
+                            <th width="180" class="text-center">
+                                Thao Tác
+                            </th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        @foreach (var user in Model)
+                        {
+                            <tr>
+
+                                <td>
+                                    <strong>#@user.Id</strong>
+                                </td>
+
+                                <td>
+                                    <span class="fw-semibold text-primary">
+                                        @user.Username
+                                    </span>
+                                </td>
+
+                                <td>
+                                    @user.FullName
+                                </td>
+
+                                <td>
+
+                                    @if (user.Role == "Administrator")
+                                    {
+                                        <span class="badge bg-danger px-3 py-2">
+                                            Administrator
+                                        </span>
+                                    }
+                                    else if (user.Role == "Editor")
+                                    {
+                                        <span class="badge bg-info text-dark px-3 py-2">
+                                            Editor
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-secondary px-3 py-2">
+                                            @user.Role
+                                        </span>
+                                    }
+
+                                </td>
+
+                                <td class="text-center">
+
+                                    <a href="/User/Edit/@user.Id"
+                                       class="btn btn-sm btn-outline-warning me-1">
+                                        ✏ Sửa
+                                    </a>
+
+                                    <a href="/User/Delete/@user.Id"
+                                       class="btn btn-sm btn-outline-danger"
+                                       onclick="return confirm('Bạn có chắc muốn xóa?')">
+                                        🗑 Xóa
+                                    </a>
+
+                                </td>
+
+                            </tr>
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

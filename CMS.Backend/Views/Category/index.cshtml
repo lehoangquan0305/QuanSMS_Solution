@@ -1,0 +1,165 @@
+﻿@model IEnumerable<CMS.Data.Entities.Category>
+
+@{
+    ViewData["Title"] = "Quản Lý Danh Mục";
+}
+
+<div class="container mt-4">
+
+    <!-- HEADER -->
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap">
+
+        <div>
+            <h2 class="fw-bold text-primary mb-1">
+                📂 QUẢN LÝ DANH MỤC
+            </h2>
+
+            <p class="text-muted">
+                Tổng số danh mục:
+                <span class="badge bg-primary">
+                    @Model.Count()
+                </span>
+            </p>
+        </div>
+
+        <div class="d-flex gap-2">
+
+            <!-- Search -->
+            <input type="text"
+                   id="searchInput"
+                   class="form-control"
+                   placeholder="🔍 Tìm danh mục..."
+                   style="width:250px;">
+
+            <!-- Button Add -->
+            <a href="/Category/Create"
+               class="btn btn-success shadow-sm">
+                + Thêm danh mục
+            </a>
+
+        </div>
+
+    </div>
+
+    <!-- CARD -->
+    <div class="card border-0 shadow-lg rounded-4">
+
+        <div class="card-body">
+
+            <div class="table-responsive">
+
+                <table class="table table-hover align-middle"
+                       id="categoryTable">
+
+                    <thead class="table-dark">
+
+                        <tr>
+                            <th width="80">ID</th>
+                            <th>Tên Danh Mục</th>
+                            <th>Mô Tả</th>
+                            <th width="200" class="text-center">
+                                Thao Tác
+                            </th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        @if (Model.Any())
+                        {
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+
+                                    <td>
+                                        <span class="badge bg-secondary">
+                                            #@item.Id
+                                        </span>
+                                    </td>
+
+                                    <td>
+
+                                        <div class="fw-bold text-primary">
+                                            @item.Name
+                                        </div>
+
+                                    </td>
+
+                                    <td>
+
+                                        <span class="text-muted">
+                                            @item.Description
+                                        </span>
+
+                                    </td>
+
+                                    <td class="text-center">
+
+                                        <a href="/Category/Edit/@item.Id"
+                                           class="btn btn-sm btn-warning text-white shadow-sm">
+                                            ✏ Sửa
+                                        </a>
+
+                                        <a href="/Category/Delete/@item.Id"
+                                           class="btn btn-sm btn-danger shadow-sm"
+                                           onclick="return confirm('Bạn chắc chắn muốn xóa danh mục này?')">
+                                            🗑 Xóa
+                                        </a>
+
+                                    </td>
+
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+
+                                <td colspan="4" class="text-center py-5">
+
+                                    <h5 class="text-muted">
+                                        Không có danh mục nào 😢
+                                    </h5>
+
+                                </td>
+
+                            </tr>
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- SEARCH SCRIPT -->
+<script>
+
+    const searchInput = document.getElementById("searchInput");
+
+    searchInput.addEventListener("keyup", function () {
+
+        const filter = this.value.toLowerCase();
+
+        const rows = document.querySelectorAll("#categoryTable tbody tr");
+
+        rows.forEach(row => {
+
+            const text = row.innerText.toLowerCase();
+
+            row.style.display =
+                text.includes(filter)
+                    ? ""
+                    : "none";
+        });
+
+    });
+
+</script>

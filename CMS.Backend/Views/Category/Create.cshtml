@@ -1,0 +1,107 @@
+﻿@model CMS.Data.Entities.Category
+
+@{
+    ViewData["Title"] = "Thêm Danh Mục";
+}
+
+<div class="container mt-5">
+
+    <!-- HEADER -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+            <h2 class="fw-bold text-success mb-1">
+                ➕ THÊM DANH MỤC
+            </h2>
+
+            <p class="text-muted">
+                Tạo mới danh mục cho hệ thống CMS
+            </p>
+        </div>
+
+        <a href="/Category"
+           class="btn btn-outline-secondary shadow-sm">
+            ↩ Quay lại
+        </a>
+
+    </div>
+
+    <!-- CARD -->
+    <div class="card border-0 shadow-lg rounded-4">
+
+        <!-- CARD HEADER -->
+        <div class="card-header bg-success text-white py-3 rounded-top-4">
+
+            <h4 class="mb-0 fw-semibold">
+                📂 Thông tin danh mục
+            </h4>
+
+        </div>
+
+        <!-- CARD BODY -->
+        <div class="card-body p-4">
+
+            <form method="post">
+
+                <!-- NAME -->
+                <div class="mb-4">
+
+                    <label class="form-label fw-bold">
+                        Tên danh mục
+                    </label>
+
+                    <input asp-for="Name"
+                           class="form-control form-control-lg"
+                           placeholder="Ví dụ: Công Nghệ, Giáo Dục..." />
+
+                    <span asp-validation-for="Name"
+                          class="text-danger"></span>
+
+                </div>
+
+                <!-- DESCRIPTION -->
+                <div class="mb-4">
+
+                    <label class="form-label fw-bold">
+                        Mô tả
+                    </label>
+
+                    <textarea asp-for="Description"
+                              class="form-control"
+                              rows="5"
+                              placeholder="Nhập mô tả cho danh mục..."></textarea>
+
+                </div>
+
+                <!-- BUTTON -->
+                <div class="d-flex gap-2">
+
+                    <button type="submit"
+                            class="btn btn-success btn-lg px-4 shadow-sm">
+
+                        💾 Lưu dữ liệu
+
+                    </button>
+
+                    <a href="/Category"
+                       class="btn btn-secondary btn-lg px-4">
+
+                        Hủy
+
+                    </a>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
