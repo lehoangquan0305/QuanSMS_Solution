@@ -45,30 +45,36 @@
         <!-- BODY -->
         <div class="card-body p-4">
 
-            <form method="post">
+            <form method="post" enctype="multipart/form-data">
 
-                <input asp-for="Id" hidden />
+                <input asp-for="Id" type="hidden" />
 
                 <!-- NAME -->
                 <div class="mb-4">
 
-                    <label class="form-label fw-bold">
-                        Tên sản phẩm
+                    <label asp-for="Name"
+                           class="form-label fw-bold">
                     </label>
 
                     <input asp-for="Name"
+                           id="Name"
                            class="form-control form-control-lg" />
+
+                    <span asp-validation-for="Name"
+                          class="text-danger"></span>
 
                 </div>
 
                 <!-- CATEGORY -->
                 <div class="mb-4">
 
-                    <label class="form-label fw-bold">
+                    <label asp-for="CategoryProductId"
+                           class="form-label fw-bold">
                         Danh mục sản phẩm
                     </label>
 
                     <select asp-for="CategoryProductId"
+                            id="CategoryProductId"
                             class="form-select form-select-lg">
 
                         <option value="">
@@ -84,29 +90,40 @@
 
                     </select>
 
+                    <span asp-validation-for="CategoryProductId"
+                          class="text-danger"></span>
+
                 </div>
 
                 <!-- PRICE -->
                 <div class="mb-4">
 
-                    <label class="form-label fw-bold">
-                        Giá sản phẩm
+                    <label asp-for="Price"
+                           class="form-label fw-bold">
                     </label>
 
                     <input asp-for="Price"
+                           id="Price"
                            class="form-control form-control-lg" />
+
+                    <span asp-validation-for="Price"
+                          class="text-danger"></span>
 
                 </div>
 
                 <!-- STOCK -->
                 <div class="mb-4">
 
-                    <label class="form-label fw-bold">
-                        Số lượng tồn kho
+                    <label asp-for="StockQuantity"
+                           class="form-label fw-bold">
                     </label>
 
                     <input asp-for="StockQuantity"
+                           id="StockQuantity"
                            class="form-control form-control-lg" />
+
+                    <span asp-validation-for="StockQuantity"
+                          class="text-danger"></span>
 
                 </div>
 
@@ -114,10 +131,11 @@
                 <div class="mb-4">
 
                     <label class="form-label fw-bold">
-                        Hình ảnh
+                        Hình ảnh sản phẩm
                     </label>
 
-                    <input asp-for="ImageUrl"
+                    <input type="file"
+                           name="uploadImage"
                            class="form-control" />
 
                 </div>
@@ -126,9 +144,15 @@
                 {
                     <div class="mb-4">
 
+                        <label class="form-label fw-bold">
+                            Hình ảnh hiện tại
+                        </label>
+
+                        <br />
+
                         <img src="@Model.ImageUrl"
                              width="200"
-                             class="rounded shadow" />
+                             class="rounded shadow border" />
 
                     </div>
                 }
@@ -136,13 +160,17 @@
                 <!-- DESCRIPTION -->
                 <div class="mb-4">
 
-                    <label class="form-label fw-bold">
-                        Mô tả sản phẩm
+                    <label asp-for="Description"
+                           class="form-label fw-bold">
                     </label>
 
                     <textarea asp-for="Description"
+                              id="Description"
                               class="form-control"
                               rows="6"></textarea>
+
+                    <span asp-validation-for="Description"
+                          class="text-danger"></span>
 
                 </div>
 
@@ -172,3 +200,10 @@
     </div>
 
 </div>
+
+@section Scripts
+{
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

@@ -124,6 +124,15 @@ namespace CMS.Backend.Controllers
         // =========================
         public IActionResult Edit(int id)
         {
+            if (!ModelState.IsValid)
+            {
+                var errors = ModelState.Values
+                    .SelectMany(v => v.Errors)
+                    .Select(e => e.ErrorMessage)
+                    .ToList();
+
+                return Json(errors);
+            }
             var post = _context.Posts.Find(id);
 
             if (post == null)

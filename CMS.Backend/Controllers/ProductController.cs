@@ -41,13 +41,45 @@ namespace CMS.Backend.Controllers
         // XỬ LÝ THÊM
         // =========================
         [HttpPost]
-        public IActionResult Create(Product product)
+        public IActionResult Create(Product product, IFormFile uploadImage)
         {
-            _context.Products.Add(product);
+            if (ModelState.IsValid)
+            {
+                if (uploadImage != null && uploadImage.Length > 0)
+                {
+                    string folder = Path.Combine(
+                        Directory.GetCurrentDirectory(),
+                        "wwwroot/uploads"
+                    );
 
-            _context.SaveChanges();
+                    if (!Directory.Exists(folder))
+                    {
+                        Directory.CreateDirectory(folder);
+                    }
 
-            return RedirectToAction("Index");
+                    string fileName =
+                        Guid.NewGuid().ToString()
+                        + Path.GetExtension(uploadImage.FileName);
+
+                    string filePath = Path.Combine(folder, fileName);
+
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        uploadImage.CopyTo(stream);
+                    }
+
+                    product.ImageUrl = "/uploads/" + fileName;
+                }
+
+                _context.Products.Add(product);
+                _context.SaveChanges();
+
+                return RedirectToAction("Index");
+            }
+
+            ViewBag.CategoryList = _context.CategoriesProducts.ToList();
+
+            return View(product);
         }
 
         // =========================
@@ -72,13 +104,56 @@ namespace CMS.Backend.Controllers
         // XỬ LÝ SỬA
         // =========================
         [HttpPost]
-        public IActionResult Edit(Product product)
+        public IActionResult Edit(Product product, IFormFile uploadImage)
         {
-            _context.Products.Update(product);
+            if (ModelState.IsValid)
+            {
+                if (uploadImage != null && uploadImage.Length > 0)
+                {
+                    string folder = Path.Combine(
+                        Directory.GetCurrentDirectory(),
+                        "wwwroot/uploads"
+                    );
 
-            _context.SaveChanges();
+                    if (!Directory.Exists(folder))
+                    {
+                        Directory.CreateDirectory(folder);
+                    }
 
-            return RedirectToAction("Index");
+                    string fileName =
+                        Guid.NewGuid().ToString()
+                        + Path.GetExtension(uploadImage.FileName);
+
+                    string filePath = Path.Combine(folder, fileName);
+
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        uploadImage.CopyTo(stream);
+                    }
+
+                    product.ImageUrl = "/uploads/" + fileName;
+                }
+                else
+                {
+                    var oldProduct = _context.Products
+                        .AsNoTracking()
+                        .FirstOrDefault(p => p.Id == product.Id);
+
+                    if (oldProduct != null)
+                    {
+                        product.ImageUrl = oldProduct.ImageUrl;
+                    }
+                }
+
+                _context.Products.Update(product);
+                _context.SaveChanges();
+
+                return RedirectToAction("Index");
+            }
+
+            ViewBag.CategoryList = _context.CategoriesProducts.ToList();
+
+            return View(product);
         }
 
         // =========================

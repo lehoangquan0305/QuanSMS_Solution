@@ -44,23 +44,27 @@
                 <!-- TITLE -->
                 <div class="mb-4">
 
-                    <label class="form-label fw-bold">
-                        Tiêu đề bài viết
-                    </label>
+                    <label asp-for="Title" class="form-label fw-bold"></label>
 
                     <input asp-for="Title"
+                           id="Title"
                            class="form-control form-control-lg" />
+
+                    <span asp-validation-for="Title"
+                          class="text-danger"></span>
 
                 </div>
 
                 <!-- CATEGORY -->
                 <div class="mb-4">
 
-                    <label class="form-label fw-bold">
+                    <label asp-for="CategoryId"
+                           class="form-label fw-bold">
                         Danh mục
                     </label>
 
                     <select asp-for="CategoryId"
+                            id="CategoryId"
                             class="form-select form-select-lg">
 
                         <option value="">
@@ -76,16 +80,21 @@
 
                     </select>
 
+                    <span asp-validation-for="CategoryId"
+                          class="text-danger"></span>
+
                 </div>
 
                 <!-- IMAGE -->
                 <div class="mb-4">
 
-                    <label class="form-label fw-bold">
+                    <label for="uploadImage"
+                           class="form-label fw-bold">
                         Hình ảnh
                     </label>
 
                     <input type="file"
+                           id="uploadImage"
                            name="uploadImage"
                            class="form-control" />
 
@@ -94,13 +103,18 @@
                 <!-- CONTENT -->
                 <div class="mb-4">
 
-                    <label class="form-label fw-bold">
+                    <label asp-for="Content"
+                           class="form-label fw-bold">
                         Nội dung
                     </label>
 
                     <textarea asp-for="Content"
+                              id="Content"
                               class="form-control"
                               rows="8"></textarea>
+
+                    <span asp-validation-for="Content"
+                          class="text-danger"></span>
 
                 </div>
 
@@ -130,18 +144,21 @@
     </div>
 
 </div>
+
 @section Scripts {
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 
     <script src="https://cdn.ckeditor.com/ckeditor5/39.0.1/classic/ckeditor.js"></script>
 
     <script>
-
         ClassicEditor
         .create(document.querySelector('#Content'))
         .catch(error => {
         console.error(error);
         });
-
     </script>
 
 }

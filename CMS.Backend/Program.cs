@@ -4,14 +4,15 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Đăng ký DbContext vào hệ thống
+// DB
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(
-        builder.Configuration.GetConnectionString("DefaultConnection")
-    ));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
+);
 
-// Add services to the container.
+// MVC + API
 builder.Services.AddControllersWithViews();
+
+// Auth
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
@@ -19,26 +20,53 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         options.AccessDeniedPath = "/Account/AccessDenied";
     });
 
+// Swagger
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
+});
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// ERROR + HSTS
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
     app.UseHsts();
 }
 
+// Swagger
+app.UseSwagger();
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "CMS API V1");
+    c.RoutePrefix = "swagger";
+});
+
 app.UseHttpsRedirection();
+
 app.UseRouting();
 
-app.UseAuthentication(); // 👈 THÊM DÒNG NÀY
+app.UseCors("AllowAll");
+
+app.UseAuthentication();
 app.UseAuthorization();
+
+// API Routing
+app.MapControllers();
 
 app.MapStaticAssets();
 
+// MVC Routing
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}")
-    .WithStaticAssets();
+    pattern: "{controller=Home}/{action=Index}/{id?}"
+).WithStaticAssets();
 
 app.Run();
