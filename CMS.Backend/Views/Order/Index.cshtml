@@ -4,98 +4,227 @@
     ViewData["Title"] = "Quản Lý Đơn Hàng";
 }
 
-<div class="container mt-4">
+<div class="container-fluid px-4 py-4 animate-fade-in" style="font-family: 'Segoe UI', sans-serif;">
 
-    <!-- HEADER -->
-    <div class="d-flex justify-content-between align-items-center mb-4">
-
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3 page-header-animate">
         <div>
-            <h2 class="fw-bold text-primary">
-                📦 QUẢN LÝ ĐƠN HÀNG
+            <h2 class="fw-black text-dark mb-1 text-uppercase d-flex align-items-center gap-2">
+                <span class="pulse-icon">📦</span> QUẢN LÝ ĐƠN HÀNG
             </h2>
-
-            <p class="text-muted">
-                Danh sách đơn hàng của khách hàng
+            <p class="text-muted mb-0 fw-semibold">
+                Theo dõi quy trình xử lý, trạng thái vận chuyển và lịch sử mua sắm
             </p>
         </div>
-
     </div>
 
-    <!-- CARD -->
-    <div class="card shadow-lg border-0 rounded-4">
-
-        <div class="card-body">
-
+    <div class="card card-premium shadow border-0 overflow-hidden">
+        <div class="card-body p-0">
             <div class="table-responsive">
-
-                <table class="table table-hover align-middle">
-
-                    <thead class="table-dark">
-
+                <table class="table table-custom align-middle mb-0">
+                    <thead>
                         <tr>
-                            <th>ID</th>
+                            <th width="100" class="ps-4">Mã Đơn</th>
                             <th>Ngày Đặt</th>
                             <th>Khách Hàng</th>
                             <th>Trạng Thái</th>
-                            <th>Ghi Chú</th>
+                            <th>Ghi Chú Hệ Thống</th>
+                            <th width="150" class="text-center pe-4">Thao tác</th>
                         </tr>
-
                     </thead>
-
                     <tbody>
-
                         @foreach (var item in Model)
                         {
-                            <tr>
-
-                                <td>
-                                    <strong>#@item.Id</strong>
+                            <tr class="table-row-hover">
+                                <td class="ps-4 text-dark fw-bold">
+                                    <span class="badge bg-light text-dark border font-monospace px-2 py-1">#@item.Id</span>
                                 </td>
-
                                 <td>
-                                    @item.OrderDate.ToString("dd/MM/yyyy")
+                                    <div class="fw-semibold text-secondary">
+                                        📅 @item.OrderDate.ToString("dd/MM/yyyy HH:mm")
+                                    </div>
                                 </td>
-
                                 <td>
-                                    @(item.Customer != null ? item.Customer.FullName : "Không có")
+                                    <div class="d-flex align-items-center gap-2">
+                                        <div class="avatar-circle-order">👤</div>
+                                        <span class="fw-bold text-primary">
+                                            @(item.Customer != null ? item.Customer.FullName : "Khách vãng lai")
+                                        </span>
+                                    </div>
                                 </td>
-
                                 <td>
                                     @if (item.Status == 0)
                                     {
-                                        <span class="badge bg-warning text-dark">
-                                            Chờ duyệt
+                                        <span class="badge bg-soft-warning text-warning badge-status px-3 py-2">
+                                            ⏳ Chờ duyệt
                                         </span>
                                     }
                                     else if (item.Status == 1)
                                     {
-                                        <span class="badge bg-info">
-                                            Đang giao
+                                        <span class="badge bg-soft-info text-info badge-status px-3 py-2">
+                                            🚚 Đang giao
                                         </span>
                                     }
                                     else
                                     {
-                                        <span class="badge bg-success">
-                                            Hoàn thành
+                                        <span class="badge bg-soft-success text-success badge-status px-3 py-2">
+                                            ✅ Hoàn thành
                                         </span>
                                     }
                                 </td>
-
                                 <td>
-                                    @item.Notes
+                                    <small class="text-muted text-truncate-notes" title="@item.Notes">
+                                        @(string.IsNullOrEmpty(item.Notes) ? "---" : item.Notes)
+                                    </small>
                                 </td>
-
+                                <td class="text-center pe-4">
+                                    <a href="/OrderDetail/Index?orderId=@item.Id" class="btn btn-action btn-action-view d-inline-flex align-items-center gap-1">
+                                        🔍 Xem chi tiết
+                                    </a>
+                                </td>
                             </tr>
                         }
-
                     </tbody>
-
                 </table>
-
             </div>
-
         </div>
-
     </div>
-
 </div>
+
+<style>
+    .fw-black {
+        font-weight: 900 !important;
+    }
+
+    .page-header-animate {
+        animation: slideDownAdmin 0.4s ease-out;
+    }
+
+    .pulse-icon {
+        display: inline-block;
+        animation: pulseEffect 2s infinite ease-in-out;
+    }
+
+    .card-premium {
+        border-radius: 16px;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.03) !important;
+        background: #ffffff;
+    }
+
+    .table-custom {
+        border-collapse: separate;
+        border-spacing: 0;
+    }
+
+        .table-custom thead th {
+            background: #0f172a;
+            color: #f8fafc;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 0.5px;
+            padding: 18px 12px;
+            border: none;
+        }
+
+        .table-custom tbody tr {
+            transition: all 0.2s ease;
+        }
+
+    .table-row-hover:hover {
+        background-color: #f8fafc !important;
+    }
+
+    .avatar-circle-order {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        background: #f1f5f9;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .badge-status {
+        font-weight: 700;
+        border-radius: 6px;
+        font-size: 0.85rem;
+    }
+
+    .bg-soft-warning {
+        background: #fffbeb;
+    }
+
+    .bg-soft-info {
+        background: #e0f2fe;
+    }
+
+    .bg-soft-success {
+        background: #dcfce7;
+    }
+
+    .text-truncate-notes {
+        max-width: 200px;
+        display: inline-block;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .btn-action-view {
+        background: #e2e8f0;
+        color: #334155;
+        text-decoration: none;
+    }
+
+        .btn-action-view:hover {
+            background: #0f172a;
+            color: #fff;
+        }
+
+    .btn-action {
+        border: none;
+        padding: 6px 14px;
+        border-radius: 8px;
+        font-size: 0.85rem;
+        font-weight: 700;
+        transition: all 0.2s ease;
+    }
+
+    @@keyframes slideDownAdmin {
+        from {
+            opacity: 0;
+            transform: translateY(-15px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @@keyframes pulseEffect {
+        0%, 100% {
+            transform: scale(1);
+        }
+
+        50% {
+            transform: scale(1.15);
+        }
+    }
+
+    .animate-fade-in {
+        animation: fadeInAdmin 0.5s cubic-bezier(0.16, 1, 0.3, 1) ease;
+    }
+
+    @@keyframes fadeInAdmin {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+</style>

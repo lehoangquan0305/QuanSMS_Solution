@@ -1,0 +1,203 @@
+.blog-page-cyber {
+    background: radial-gradient(circle at 50% 0%, #111827 0%, #030712 100%);
+    min-height: 100vh;
+    color: #fff;
+    padding-bottom: 100px;
+}
+
+.fw-mono {
+    font-family: SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
+}
+
+/* HERO BLOG CYBER */
+.blog-hero-cyber {
+    padding: 140px 0;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1px solid rgba(6, 182, 212, 0.2);
+}
+
+.grid-overlay-blog {
+    position: absolute;
+    inset: 0;
+    background-image: linear-gradient(rgba(6, 182, 212, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(6, 182, 212, 0.05) 1px, transparent 1px);
+    background-size: 30px 30px;
+    z-index: 1;
+}
+
+.blog-hero-cyber h1 {
+    font-size: 58px;
+    font-weight: 900;
+    letter-spacing: -1px;
+    margin-bottom: 20px;
+    text-shadow: 0 0 20px rgba(6, 182, 212, 0.4);
+}
+
+/* SIDEBAR GLASS */
+.blog-sidebar-cyber {
+    background: rgba(17, 24, 39, 0.7);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(6, 182, 212, 0.15);
+    border-radius: 20px;
+    padding: 30px;
+    position: sticky;
+    top: 100px;
+}
+
+.cat-btn-cyber {
+    width: 100%;
+    border: 1px solid rgba(255,255,255,0.05);
+    background: rgba(255,255,255,0.02);
+    color: #9ca3af;
+    padding: 14px;
+    margin-bottom: 10px;
+    border-radius: 12px;
+    text-align: left;
+    font-weight: 700;
+    font-family: monospace;
+    transition: all 0.3s;
+}
+
+    .cat-btn-cyber:hover, .cat-btn-cyber.active {
+        background: #06b6d4;
+        color: #030712;
+        border-color: transparent;
+        box-shadow: 0 0 15px rgba(6, 182, 212, 0.5);
+        transform: translateX(5px);
+    }
+
+/* BLOG CARD V3 */
+.blog-card-cyber-v3 {
+    background: rgba(31, 41, 55, 0.5);
+    border-radius: 20px;
+    overflow: hidden;
+    border: 1px solid rgba(6, 182, 212, 0.1);
+    transition: 0.4s;
+}
+
+    .blog-card-cyber-v3:hover {
+        transform: translateY(-10px);
+        border-color: #06b6d4;
+        box-shadow: 0 10px 30px rgba(6, 182, 212, 0.2);
+    }
+
+.blog-image-cyber {
+    height: 220px;
+    position: relative;
+    overflow: hidden;
+}
+
+    .blog-image-cyber img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: 0.6s;
+    }
+
+.blog-card-cyber-v3:hover img {
+    transform: scale(1.1);
+}
+
+.image-scan-line {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: rgba(6, 182, 212, 0.5);
+    box-shadow: 0 0 10px #06b6d4;
+    animation: scanMove 3s infinite linear;
+}
+
+@keyframes scanMove {
+    0% {
+        top: 0;
+    }
+
+    100% {
+        top: 100%;
+    }
+}
+
+.blog-body-cyber {
+    padding: 24px;
+}
+
+.blog-badge-cyber {
+    color: #22d3ee;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    margin-bottom: 15px;
+    display: block;
+}
+
+.blog-btn-cyber {
+    padding: 12px;
+    background: rgba(6, 182, 212, 0.1);
+    color: #22d3ee;
+    border: 1px solid rgba(6, 182, 212, 0.3);
+    border-radius: 10px;
+    text-decoration: none;
+    display: block;
+    text-align: center;
+    transition: 0.3s;
+}
+
+    .blog-btn-cyber:hover {
+        background: #06b6d4;
+        color: #030712;
+        box-shadow: 0 0 15px #06b6d4;
+    }
+
+/* ✅ PAGINATION CYBER */
+.pg-btn-cyber {
+    width: 45px;
+    height: 45px;
+    background: rgba(17, 24, 39, 0.8);
+    border: 1px solid rgba(6, 182, 212, 0.3);
+    color: #fff;
+    border-radius: 10px;
+    font-family: monospace;
+    font-weight: 900;
+    transition: 0.3s;
+}
+
+    .pg-btn-cyber.active, .pg-btn-cyber:hover:not(:disabled) {
+        background: #06b6d4;
+        color: #030712;
+        box-shadow: 0 0 15px #06b6d4;
+        border-color: transparent;
+    }
+
+    .pg-btn-cyber:disabled {
+        opacity: 0.3;
+        cursor: not-allowed;
+    }
+
+/* LOADING */
+.blog-cyber-loading {
+    min-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: #030712;
+}
+
+.spinner-cyber-main {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 3px solid transparent;
+    border-top-color: #06b6d4;
+    border-bottom-color: #3b82f6;
+    animation: spinCyber 1s infinite linear;
+}
+
+@keyframes spinCyber {
+    to {
+        transform: rotate(360deg);
+    }
+}

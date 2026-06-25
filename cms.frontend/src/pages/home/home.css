@@ -1,0 +1,311 @@
+/* ===== FILE STYLE HOÀN CHỈNH CHO VŨ TRỤ CYBERPUNK HOME ===== */
+
+.main-cyber-wrapper {
+    background: #030712;
+    overflow: hidden;
+}
+
+.fw-mono-home {
+    font-family: SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
+}
+
+/* TIÊU ĐỀ CHUNG PHÁT QUANG */
+.section-title-cyber {
+    text-align: center;
+    font-size: 32px;
+    font-weight: 900;
+    letter-spacing: 2px;
+    color: #ffffff;
+    margin-bottom: 10px;
+}
+
+.text-glow-cyber-home {
+    text-shadow: 0 0 15px rgba(6, 182, 212, 0.4);
+}
+
+.cyber-divider-home {
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(90deg, #06b6d4, #3b82f6);
+    box-shadow: 0 0 8px #06b6d4;
+    border-radius: 2px;
+}
+
+/* ===== INTRO SECTION VŨ TRỤ SÂU ===== */
+.home-intro-cyber {
+    padding: 90px 0;
+    background: radial-gradient(circle at 50% 50%, #0f172a 0%, #030712 100%);
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1px solid rgba(6, 182, 212, 0.1);
+}
+
+    /* Hai luồng sáng dịch chuyển tạo chiều sâu không gian mạng */
+    .home-intro-cyber::before,
+    .home-intro-cyber::after {
+        content: "";
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(100px);
+        z-index: 1;
+        opacity: 0.25;
+    }
+
+    .home-intro-cyber::before {
+        width: 350px;
+        height: 350px;
+        background: #06b6d4;
+        top: -50px;
+        left: -50px;
+        animation: floatHome 7s infinite ease-in-out;
+    }
+
+    .home-intro-cyber::after {
+        width: 300px;
+        height: 300px;
+        background: #3b82f6;
+        bottom: -50px;
+        right: -50px;
+        animation: floatHome 9s infinite ease-in-out reverse;
+    }
+
+@keyframes floatHome {
+    0%, 100% {
+        transform: translateY(0) scale(1);
+    }
+
+    50% {
+        transform: translateY(25px) scale(1.08);
+    }
+}
+
+/* Thẻ kính cường lực cao cấp */
+.intro-box-cyber {
+    position: relative;
+    z-index: 2;
+    background: rgba(17, 24, 39, 0.65);
+    backdrop-filter: blur(16px);
+    padding: 50px 40px;
+    border-radius: 24px;
+    border: 1px solid rgba(6, 182, 212, 0.15);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+}
+
+/* Hiệu ứng quét sáng lướt qua thẻ */
+.cyber-shimmer-fast {
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 30%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(6, 182, 212, 0.05), transparent);
+    transform: skewX(-20deg);
+    animation: shimmerHome 8s infinite linear;
+}
+
+@keyframes shimmerHome {
+    0% {
+        left: -150%;
+    }
+
+    100% {
+        left: 150%;
+    }
+}
+
+.title-cyber-home {
+    font-size: 40px;
+    font-weight: 900;
+    letter-spacing: -0.5px;
+    margin-bottom: 18px;
+    text-transform: uppercase;
+    color: #ffffff;
+}
+
+.subtitle-cyber-home {
+    font-size: 1.05rem;
+    color: #9ca3af;
+    max-width: 650px;
+    margin: 0 auto 35px auto;
+    line-height: 1.7;
+    letter-spacing: 0.5px;
+}
+
+/* KHỐI BUTTONS TECHWEAR */
+.intro-actions-cyber {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.btn-cyber-home {
+    padding: 14px 35px;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 0.88rem;
+    cursor: pointer;
+    letter-spacing: 1.5px;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-cyber-home-primary {
+    background: linear-gradient(45deg, #06b6d4, #3b82f6);
+    border: none;
+    color: #ffffff;
+}
+
+    .btn-cyber-home-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 0 20px rgba(6, 182, 212, 0.45);
+    }
+
+.btn-cyber-home-outline {
+    background: transparent;
+    border: 1px solid rgba(6, 182, 212, 0.4);
+    color: #22d3ee;
+}
+
+    .btn-cyber-home-outline:hover {
+        background: rgba(6, 182, 212, 0.08);
+        border-color: #22d3ee;
+        transform: translateY(-2px);
+        box-shadow: 0 0 15px rgba(6, 182, 212, 0.15);
+    }
+
+/* SECTION CHUNG CHUYỂN VÙNG */
+.section-block-cyber {
+    padding: 70px 0;
+}
+
+.bg-cyber-dark-accent {
+    background: rgba(15, 23, 42, 0.3) !important;
+    border-top: 1px solid rgba(6, 182, 212, 0.05);
+    border-bottom: 1px solid rgba(6, 182, 212, 0.05);
+}
+
+/* TIÊU ĐỀ LỌC SẢN PHẨM KHÔNG CẦN STYLE INLINE */
+.product-filter-header-cyber {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    border-bottom: 1px solid rgba(6, 182, 212, 0.15);
+    padding-bottom: 15px;
+}
+
+.filter-title-cyber {
+    font-size: 22px;
+    font-weight: 800;
+    margin: 0;
+    letter-spacing: 1px;
+}
+
+/* Đốm tín hiệu nhấp nháy chạy ngầm */
+.live-status-pulse {
+    width: 8px;
+    height: 8px;
+    background-color: #22d3ee;
+    border-radius: 50%;
+    box-shadow: 0 0 10px #22d3ee;
+    animation: statusBlink 1.5s infinite ease-in-out;
+}
+
+@keyframes statusBlink {
+    0%, 100% {
+        opacity: 0.3;
+    }
+
+    50% {
+        opacity: 1;
+    }
+}
+
+/* ===== FEATURES TECH-CARDS ===== */
+.features-cyber {
+    padding: 80px 0;
+    background: #030712;
+    border-top: 1px solid rgba(6, 182, 212, 0.1);
+}
+
+.feature-grid-cyber {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+}
+
+.feature-card-cyber {
+    background: rgba(17, 24, 39, 0.5);
+    padding: 40px 30px;
+    border-radius: 20px;
+    border: 1px solid rgba(6, 182, 212, 0.08);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.feature-icon-cyber {
+    font-size: 2rem;
+    margin-bottom: 15px;
+    filter: drop-shadow(0 0 8px rgba(6, 182, 212, 0.3));
+}
+
+.feature-card-cyber h3 {
+    font-size: 18px;
+    font-weight: 800;
+    margin-bottom: 14px;
+    color: #ffffff;
+    letter-spacing: 1px;
+}
+
+.feature-card-cyber p {
+    color: #9ca3af;
+    font-size: 0.92rem;
+    line-height: 1.6;
+    margin: 0;
+}
+
+.feature-card-cyber:hover {
+    transform: translateY(-6px);
+    background: rgba(17, 24, 39, 0.8);
+    border-color: rgba(6, 182, 212, 0.3);
+    box-shadow: 0 15px 35px rgba(6, 182, 212, 0.1);
+}
+
+/* RESPONSIVE RE-STYLING CHO DI ĐỘNG */
+@media (max-width: 992px) {
+    .feature-grid-cyber {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .title-cyber-home {
+        font-size: 32px;
+    }
+}
+
+@media (max-width: 768px) {
+    .feature-grid-cyber {
+        grid-template-columns: 1fr;
+    }
+
+    .title-cyber-home {
+        font-size: 26px;
+    }
+
+    .section-title-cyber {
+        font-size: 26px;
+    }
+
+    .intro-box-cyber {
+        padding: 35px 20px;
+        border-radius: 16px;
+    }
+
+    .intro-actions-cyber {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .btn-cyber-home {
+        width: 100%;
+        text-align: center;
+    }
+}

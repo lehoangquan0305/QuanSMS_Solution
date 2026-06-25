@@ -4,270 +4,575 @@
     ViewData["Title"] = "Dashboard";
 }
 
-<!-- STATS -->
-<div class="stats-grid">
+<div class="dashboard-wrapper animate-page-load" style="font-family: 'Segoe UI', sans-serif; padding: 24px;">
 
-    <div class="stats-card blue">
-
-        <div>
-            <p>Tổng Bài Viết</p>
-            <h3>@ViewBag.TotalPosts</h3>
-        </div>
-
-        <span>📰</span>
-
+    <div class="welcome-banner mb-4">
+        <h2 class="fw-black text-dark mb-1">👋 XIN CHÀO ADMIN!</h2>
+        <p class="text-muted mb-0 fw-semibold">Hệ thống của bạn đang vận hành ổn định. Dưới đây là hiệu suất thời gian thực.</p>
     </div>
 
-    <div class="stats-card green">
-
-        <div>
-            <p>Tổng Sản Phẩm</p>
-            <h3>@ViewBag.TotalProducts</h3>
+    <div class="stats-grid">
+        <div class="stats-card glass-blue">
+            <div class="card-glow"></div>
+            <div class="stats-info">
+                <p>Tổng Bài Viết</p>
+                <h3 class="count-up" data-target="@(ViewBag.TotalPosts ?? 0)">0</h3>
+            </div>
+            <div class="stats-icon text-bounce">📰</div>
         </div>
 
-        <span>🛒</span>
-
-    </div>
-
-    <div class="stats-card orange">
-
-        <div>
-            <p>Khách Hàng</p>
-            <h3>@ViewBag.TotalCustomers</h3>
+        <div class="stats-card glass-green">
+            <div class="card-glow"></div>
+            <div class="stats-info">
+                <p>Tổng Sản Phẩm</p>
+                <h3 class="count-up" data-target="@(ViewBag.TotalProducts ?? 0)">0</h3>
+            </div>
+            <div class="stats-icon text-bounce">🛒</div>
         </div>
 
-        <span>👥</span>
-
-    </div>
-
-    <div class="stats-card red">
-
-        <div>
-            <p>Đơn Hàng</p>
-            <h3>@ViewBag.TotalOrders</h3>
+        <div class="stats-card glass-orange">
+            <div class="card-glow"></div>
+            <div class="stats-info">
+                <p>Khách Hàng</p>
+                <h3 class="count-up" data-target="@(ViewBag.TotalCustomers ?? 0)">0</h3>
+            </div>
+            <div class="stats-icon text-bounce">👥</div>
         </div>
 
-        <span>📦</span>
-
+        <div class="stats-card glass-red">
+            <div class="card-glow"></div>
+            <div class="stats-info">
+                <p>Đơn Hàng</p>
+                <h3 class="count-up" data-target="@(ViewBag.TotalOrders ?? 0)">0</h3>
+            </div>
+            <div class="stats-icon text-bounce">📦</div>
+        </div>
     </div>
 
-</div>
+    <div class="content-grid mt-4">
 
-<!-- CONTENT -->
-<div class="content-grid">
-
-    <!-- LEFT -->
-    <div class="left-content">
-
-        <!-- QUICK ACTION -->
-        <div class="dashboard-card">
-
-            <div class="card-header-custom">
-                <h4>⚡ Truy cập nhanh</h4>
+        <div class="left-content">
+            <div class="dashboard-card action-card">
+                <div class="card-header-custom">
+                    <h4>⚡ Truy cập nhanh hệ thống</h4>
+                </div>
+                <div class="quick-actions">
+                    <a href="/Post/Create" class="action-btn glow-primary">+ Thêm bài viết</a>
+                    <a href="/Product/Create" class="action-btn glow-success">+ Thêm sản phẩm</a>
+                    <a href="/Order" class="action-btn glow-dark">🔍 Xem đơn hàng</a>
+                </div>
             </div>
 
-            <div class="quick-actions">
-
-                <a href="/Post/Create"
-                   class="action-btn primary">
-                    + Thêm bài viết
-                </a>
-
-                <a href="/Product/Create"
-                   class="action-btn success">
-                    + Thêm sản phẩm
-                </a>
-
-                <a href="/Order"
-                   class="action-btn dark">
-                    Xem đơn hàng
-                </a>
-
-            </div>
-
-        </div>
-
-        <!-- TABLE -->
-        <div class="dashboard-card mt-4">
-
-            <div class="card-header-custom d-flex justify-content-between align-items-center">
-
-                <h4>📋 Đơn hàng gần đây</h4>
-
-                <a href="/Order"
-                   class="btn btn-sm btn-primary">
-                    Xem tất cả
-                </a>
-
-            </div>
-
-            <div class="table-responsive">
-
-                <table class="table modern-table align-middle">
-
-                    <thead>
-
-                        <tr>
-                            <th>Mã ĐH</th>
-                            <th>Khách Hàng</th>
-                            <th>Ngày Đặt</th>
-                            <th>Trạng Thái</th>
-                            <th>Ghi Chú</th>
-                        </tr>
-
-                    </thead>
-
-                    <tbody>
-
-                        @if (Model != null && Model.Any())
-                        {
-                            @foreach (var item in Model)
+            <div class="dashboard-card mt-4 table-card">
+                <div class="card-header-custom d-flex justify-content-between align-items-center">
+                    <h4>📋 Đơn hàng mới cập nhật</h4>
+                    <a href="/Order" class="btn btn-view-all">Xem tất cả →</a>
+                </div>
+                <div class="table-responsive">
+                    <table class="table modern-table align-middle mb-0">
+                        <thead>
+                            <tr>
+                                <th>Mã ĐH</th>
+                                <th>Khách Hàng</th>
+                                <th>Ngày Đặt</th>
+                                <th>Trạng Thái</th>
+                                <th>Ghi Chú</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model != null && Model.Any())
+                            {
+                                foreach (var item in Model)
+                                {
+                                    <tr class="animated-row">
+                                        <td><strong class="text-dark">#@item.Id</strong></td>
+                                        <td><span class="customer-tag">👤 KH @item.CustomerId</span></td>
+                                        <td><span class="text-secondary fw-semibold">@item.OrderDate.ToString("dd/MM/yyyy")</span></td>
+                                        <td>
+                                            @if (item.Status == 0)
+                                            {
+                                                <span class="badge badge-pulse bg-soft-success text-success">● Đang xử lý</span>
+                                            }
+                                            else if (item.Status == 1)
+                                            {
+                                                <span class="badge badge-pulse bg-soft-warning text-dark">● Hoàn thành</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-soft-danger text-danger">● Đã hủy</span>
+                                            }
+                                        </td>
+                                        <td class="text-muted italic-notes">@(string.IsNullOrEmpty(item.Notes) ? "---" : item.Notes)</td>
+                                    </tr>
+                                }
+                            }
+                            else
                             {
                                 <tr>
-
-                                    <td>
-                                        <strong>#@item.Id</strong>
+                                    <td colspan="5" class="text-center text-muted py-5">
+                                        <span class="fs-2 d-block mb-2">📭</span> Không có dữ liệu đơn hàng gần đây
                                     </td>
-
-                                    <td>
-                                        KH @item.CustomerId
-                                    </td>
-
-                                    <td>
-                                        @item.OrderDate.ToString("dd/MM/yyyy")
-                                    </td>
-
-                                    <td>
-
-                                        @if (item.Status == 0)
-                                        {
-                                            <span class="badge bg-success">
-                                                Đang xử lý
-                                            </span>
-                                        }
-                                        else if (item.Status == 1)
-                                        {
-                                            <span class="badge bg-warning text-dark">
-                                                Hoàn thành
-                                            </span>
-                                        }
-                                        else
-                                        {
-                                            <span class="badge bg-danger">
-                                                Đã hủy
-                                            </span>
-                                        }
-
-                                    </td>
-
-                                    <td>
-                                        @item.Notes
-                                    </td>
-
                                 </tr>
                             }
-                        }
-                        else
-                        {
-                            <tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
 
-                                <td colspan="5"
-                                    class="text-center text-muted py-4">
-
-                                    Không có dữ liệu đơn hàng
-
-                                </td>
-
-                            </tr>
-                        }
-
-                    </tbody>
-
-                </table>
-
+        <div class="right-content">
+            <div class="dashboard-card">
+                <div class="card-header-custom">
+                    <h4>🔔 Trung tâm thông báo</h4>
+                </div>
+                <div class="notification-list">
+                    <div class="notify notify-slide success">
+                        <h6>Tổng khối lượng đơn hàng</h6>
+                        <p>Hiện tại có <strong class="text-success">@ViewBag.TotalOrders</strong> đơn đang xếp hàng chờ duyệt.</p>
+                    </div>
+                    <div class="notify notify-slide warning">
+                        <h6>Kho hàng sản phẩm</h6>
+                        <p>Kho lưu trữ đang chứa <strong class="text-warning">@ViewBag.TotalProducts</strong> mã sản phẩm Adidas.</p>
+                    </div>
+                    <div class="notify notify-slide info">
+                        <h6>Cộng đồng thành viên</h6>
+                        <p>Hệ thống ghi nhận <strong class="text-info">@ViewBag.TotalCustomers</strong> khách hàng đăng ký.</p>
+                    </div>
+                </div>
             </div>
 
+            <div class="dashboard-card mt-4">
+                <div class="card-header-custom">
+                    <h4>📈 Hoạt động / Thống kê nhanh</h4>
+                </div>
+                <ul class="activity-list-premium">
+                    <li>
+                        <span class="radar-dot bg-blue"></span>
+                        <div>Tổng bài viết cẩm nang: <strong class="fs-5 text-dark">@ViewBag.TotalPosts</strong></div>
+                    </li>
+                    <li>
+                        <span class="radar-dot bg-green"></span>
+                        <div>Tổng sản phẩm lên sàn: <strong class="fs-5 text-dark">@ViewBag.TotalProducts</strong></div>
+                    </li>
+                    <li>
+                        <span class="radar-dot bg-red"></span>
+                        <div>Tổng đơn hàng thu về: <strong class="fs-5 text-dark">@ViewBag.TotalOrders</strong></div>
+                    </li>
+                </ul>
+            </div>
         </div>
 
     </div>
-
-    <!-- RIGHT -->
-    <div class="right-content">
-
-        <!-- NOTIFICATION -->
-        <div class="dashboard-card">
-
-            <div class="card-header-custom">
-                <h4>🔔 Thông báo</h4>
-            </div>
-
-            <div class="notification-list">
-
-                <div class="notify success">
-
-                    <h6>Tổng đơn hàng</h6>
-
-                    <p>
-                        Hiện có @ViewBag.TotalOrders đơn hàng
-                    </p>
-
-                </div>
-
-                <div class="notify warning">
-
-                    <h6>Tổng sản phẩm</h6>
-
-                    <p>
-                        Hiện có @ViewBag.TotalProducts sản phẩm
-                    </p>
-
-                </div>
-
-                <div class="notify info">
-
-                    <h6>Tổng khách hàng</h6>
-
-                    <p>
-                        Hiện có @ViewBag.TotalCustomers khách hàng
-                    </p>
-
-                </div>
-
-            </div>
-
-        </div>
-
-        <!-- ACTIVITY -->
-        <div class="dashboard-card mt-4">
-
-            <div class="card-header-custom">
-                <h4>📈 Hoạt động</h4>
-            </div>
-
-            <ul class="activity-list">
-
-                <li>
-                    <span class="dot green"></span>
-                    Tổng bài viết:
-                    <strong>@ViewBag.TotalPosts</strong>
-                </li>
-
-                <li>
-                    <span class="dot blue"></span>
-                    Tổng sản phẩm:
-                    <strong>@ViewBag.TotalProducts</strong>
-                </li>
-
-                <li>
-                    <span class="dot red"></span>
-                    Tổng đơn hàng:
-                    <strong>@ViewBag.TotalOrders</strong>
-                </li>
-
-            </ul>
-
-        </div>
-
-    </div>
-
 </div>
+
+<style>
+    .fw-black {
+        font-weight: 900 !important;
+    }
+
+    /* Vào trang mượt mà */
+    .animate-page-load {
+        animation: pageFadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) ease;
+    }
+
+    /* Bố cục Grid gốc nhưng tinh chỉnh lề */
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 20px;
+    }
+
+    .content-grid {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 24px;
+    }
+
+    @@media (max-width: 992px) {
+        .content-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    /* THẺ THỐNG KÊ KÍNH MỜ PHÁT SÁNG HOLOGRAPHIC */
+    .stats-card {
+        position: relative;
+        padding: 24px;
+        border-radius: 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        overflow: hidden;
+        border: 1px solid rgba(255,255,255,0.7);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
+        background: #fff;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+        .stats-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+        }
+
+    /* Hiệu ứng quét vệt sáng chạy qua Card */
+    .card-glow {
+        position: absolute;
+        top: 0;
+        left: -150%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
+        transition: 0.6s;
+    }
+
+    .stats-card:hover .card-glow {
+        left: 150%;
+    }
+
+    /* Đổi màu gradient nền kính siêu sang */
+    .glass-blue {
+        background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%);
+        color: #0369a1;
+    }
+
+    .glass-green {
+        background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
+        color: #15803d;
+    }
+
+    .glass-orange {
+        background: linear-gradient(135deg, #ffedd5 0%, #fed7aa 100%);
+        color: #c2410c;
+    }
+
+    .glass-red {
+        background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+        color: #b91c1c;
+    }
+
+    .stats-info h3 {
+        font-size: 2.2rem;
+        font-weight: 800;
+        margin: 5px 0 0 0;
+    }
+
+    .stats-info p {
+        margin: 0;
+        font-weight: 700;
+        text-transform: uppercase;
+        font-size: 0.75rem;
+        letter-spacing: 0.5px;
+        opacity: 0.8;
+    }
+
+    /* Icon nảy nhẹ vui mắt */
+    .stats-icon {
+        font-size: 2.4rem;
+        transition: transform 0.3s ease;
+    }
+
+    .stats-card:hover .stats-icon {
+        transform: scale(1.3) rotate(10deg);
+    }
+
+    /* CARD HOÀN THIỆN ĐỒNG BỘ */
+    .dashboard-card {
+        background: #ffffff;
+        border-radius: 20px;
+        padding: 24px;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.02);
+        border: 1px solid #f1f5f9;
+        transition: transform 0.3s ease;
+    }
+
+    .card-header-custom h4 {
+        font-size: 1.1rem;
+        font-weight: 800;
+        color: #1e293b;
+        margin-bottom: 20px;
+    }
+
+    /* NÚT BẤM PHÁT SÁNG GLOW NEON */
+    .quick-actions {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+    }
+
+    .action-btn {
+        padding: 12px 20px;
+        border-radius: 12px;
+        font-weight: 700;
+        text-decoration: none;
+        font-size: 0.9rem;
+        transition: all 0.3s ease;
+    }
+
+    .glow-primary {
+        background: #3b82f6;
+        color: white;
+        box-shadow: 0 4px 14px rgba(59, 130, 246, 0.4);
+    }
+
+        .glow-primary:hover {
+            background: #1d4ed8;
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.6);
+            transform: translateY(-2px);
+        }
+
+    .glow-success {
+        background: #10b981;
+        color: white;
+        box-shadow: 0 4px 14px rgba(16, 185, 129, 0.4);
+    }
+
+        .glow-success:hover {
+            background: #047857;
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.6);
+            transform: translateY(-2px);
+        }
+
+    .glow-dark {
+        background: #1e293b;
+        color: white;
+        box-shadow: 0 4px 14px rgba(30, 41, 59, 0.4);
+    }
+
+        .glow-dark:hover {
+            background: #0f172a;
+            box-shadow: 0 6px 20px rgba(30, 41, 59, 0.6);
+            transform: translateY(-2px);
+        }
+
+    /* MORDEN TABLE VÀ HIỆU ỨNG DÒNG LƯỚT NỔI BẬT */
+    .modern-table thead th {
+        background: #f8fafc;
+        color: #64748b;
+        font-weight: 700;
+        text-transform: uppercase;
+        font-size: 0.75rem;
+        padding: 14px;
+        border: none;
+    }
+
+    .animated-row {
+        transition: all 0.2s ease;
+    }
+
+        .animated-row:hover {
+            background-color: #f1f5f9 !important;
+            transform: scale(1.005);
+        }
+
+    .customer-tag {
+        background: #eff6ff;
+        color: #1e40af;
+        font-weight: 700;
+        padding: 4px 8px;
+        border-radius: 6px;
+        font-size: 0.85rem;
+    }
+
+    .italic-notes {
+        font-style: italic;
+        max-width: 150px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    /* Badge nhấp nháy phát sáng nhẹ */
+    .badge-pulse {
+        position: relative;
+        font-weight: 700;
+        padding: 6px 12px;
+        border-radius: 8px;
+    }
+
+    .bg-soft-success {
+        background: #dcfce7;
+    }
+
+    .bg-soft-warning {
+        background: #fef3c7;
+    }
+
+    .bg-soft-danger {
+        background: #fee2e2;
+    }
+
+    /* THÔNG BÁO SLIDE TRƯỢT TỪNG THẺ */
+    .notification-list {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .notify {
+        padding: 16px;
+        border-radius: 12px;
+        border-left: 5px solid;
+        background: #fafafa;
+    }
+
+        .notify.success {
+            border-color: #10b981;
+            background: #f0fdf4;
+        }
+
+        .notify.warning {
+            border-color: #f59e0b;
+            background: #fffbeb;
+        }
+
+        .notify.info {
+            border-color: #3b82f6;
+            background: #eff6ff;
+        }
+
+        .notify h6 {
+            font-weight: 800;
+            margin-bottom: 4px;
+            color: #1e293b;
+        }
+
+        .notify p {
+            margin: 0;
+            font-size: 0.85rem;
+            color: #475569;
+        }
+
+    /* TIMELINE RADAR PULSE */
+    .activity-list-premium {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+
+        .activity-list-premium li {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            font-weight: 600;
+            color: #475569;
+            font-size: 0.9rem;
+        }
+
+    .radar-dot {
+        position: relative;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        display: inline-block;
+    }
+
+        .radar-dot::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            animation: radarPulse 1.5s infinite ease-out;
+            box-shadow: 0 0 0 4px cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+    .bg-blue {
+        background: #3b82f6;
+    }
+
+        .bg-blue::after {
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.5);
+        }
+
+    .bg-green {
+        background: #10b981;
+    }
+
+        .bg-green::after {
+            box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.5);
+        }
+
+    .bg-red {
+        background: #ef4444;
+    }
+
+        .bg-red::after {
+            box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.5);
+        }
+
+    .btn-view-all {
+        background: #f1f5f9;
+        color: #475569;
+        font-weight: 700;
+        font-size: 0.8rem;
+        border-radius: 8px;
+        padding: 6px 12px;
+        text-decoration: none;
+        transition: 0.2s;
+    }
+
+        .btn-view-all:hover {
+            background: #1e293b;
+            color: white;
+        }
+
+    /* ĐỊNH NGHĨA ANIMATIONS */
+    @@keyframes pageFadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(15px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @@keyframes radarPulse {
+        0% {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        100% {
+            transform: scale(2.5);
+            opacity: 0;
+        }
+    }
+</style>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const counters = document.querySelectorAll('.count-up');
+
+        counters.forEach(counter => {
+            const dataAttr = counter.getAttribute('data-target');
+            const target = dataAttr ? parseInt(dataAttr, 10) : 0;
+
+            if (isNaN(target) || target <= 0) {
+                counter.innerText = "0";
+                return;
+            }
+
+            const speed = target > 10 ? Math.ceil(target / 40) : 1;
+
+            const updateCount = () => {
+                const current = parseInt(counter.innerText, 10) || 0;
+                if (current < target) {
+                    counter.innerText = current + speed > target ? target : current + speed;
+                    setTimeout(updateCount, 25);
+                } else {
+                    counter.innerText = target;
+                }
+            };
+
+            updateCount();
+        });
+    });
+</script>

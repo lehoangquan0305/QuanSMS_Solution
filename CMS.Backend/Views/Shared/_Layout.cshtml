@@ -3,70 +3,88 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
     <title>@ViewData["Title"] - CMS Admin</title>
 
-    <link rel="stylesheet"
-          href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
-          rel="stylesheet">
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
 
     <style>
-
             * {
                 font-family: 'Inter', sans-serif;
             }
 
             body {
                 margin: 0;
-                background: #f1f5f9;
+                background: #f8fafc; /* Màu nền xám dịu mắt theo tiêu chuẩn Dashboard mới */
+                color: #1e293b;
+                overflow-x: hidden;
             }
 
+            /* KHUNG WRAPPER CHÍNH */
             .admin-wrapper {
                 display: flex;
                 min-height: 100vh;
-
             }
 
-            /* SIDEBAR */
-
+            /* SIDEBAR CAO CẤP */
             .sidebar {
-                width: 270px;
+                width: 280px;
                 background: #0f172a;
                 color: white;
                 position: fixed;
                 height: 100vh;
-                padding: 24px;
+                padding: 28px 20px;
                 overflow-y: auto;
+                z-index: 100;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                box-shadow: 4px 0 20px rgba(15, 23, 42, 0.08);
+                transition: all 0.3s ease;
             }
 
+            /* Logo thương hiệu */
             .sidebar-logo {
                 display: flex;
                 align-items: center;
                 gap: 14px;
-                margin-bottom: 40px;
+                margin-bottom: 35px;
+                padding-left: 8px;
             }
 
             .logo-icon {
-                width: 55px;
-                height: 55px;
-                border-radius: 18px;
-                background: linear-gradient(135deg,#3b82f6,#06b6d4);
+                width: 48px;
+                height: 48px;
+                border-radius: 14px;
+                background: linear-gradient(135deg, #3b82f6, #06b6d4);
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                font-weight: bold;
-                font-size: 18px;
+                font-weight: 900;
+                font-size: 16px;
+                color: white;
+                box-shadow: 0 8px 16px rgba(59, 130, 246, 0.25);
             }
 
+            .sidebar-logo h3 {
+                font-size: 1.15rem;
+                font-weight: 800;
+                margin: 0;
+                letter-spacing: 0.5px;
+                background: linear-gradient(135deg, #ffffff, #cbd5e1);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+            }
+
+            /* Danh sách Menu điều hướng */
             .sidebar-menu {
                 list-style: none;
                 padding: 0;
+                margin: 0;
             }
 
                 .sidebar-menu li {
-                    margin-bottom: 10px;
+                    margin-bottom: 6px;
                 }
 
                 .sidebar-menu a {
@@ -74,462 +92,251 @@
                     align-items: center;
                     gap: 12px;
                     text-decoration: none;
-                    color: #d1d5db;
-                    padding: 14px 18px;
-                    border-radius: 14px;
-                    transition: .3s;
+                    color: #94a3b8;
+                    padding: 12px 16px;
+                    border-radius: 12px;
+                    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
                     font-weight: 500;
+                    font-size: 0.92rem;
                 }
 
                     .sidebar-menu a:hover {
                         background: #1e293b;
-                        color: white;
-                        transform: translateX(5px);
+                        color: #f8fafc;
+                        transform: translateX(4px);
                     }
 
                     .sidebar-menu a.active {
-                        background: linear-gradient(135deg,#2563eb,#06b6d4);
+                        background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
                         color: white;
+                        font-weight: 600;
+                        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
                     }
 
+            /* Chân Sidebar (User Profile) */
             .sidebar-footer {
-                border-top: 1px solid #334155;
+                border-top: 1px solid #1e293b;
                 padding-top: 20px;
-                margin-top: 30px;
+                margin-top: 25px;
             }
 
-            .admin-user {
-                display: flex;
-                align-items: center;
-                gap: 12px;
+            .admin-user img {
+                width: 42px;
+                height: 42px;
+                border-radius: 12px;
+                object-fit: cover;
+                border: 2px solid #334155;
+                transition: border-color 0.3s;
             }
 
-                .admin-user img {
-                    width: 45px;
-                    height: 45px;
-                    border-radius: 50%;
-                }
+            .admin-user:hover img {
+                border-color: #3b82f6;
+            }
 
-            /* MAIN */
-
+            /* KHU VỰC HIỂN THỊ NỘI DUNG CHÍNH */
             .main-content {
-                margin-left: 270px;
+                margin-left: 280px;
                 flex: 1;
-                padding: 35px;
+                padding: 30px 40px;
+                min-width: 0; /* Chống vỡ layout hệ thống khi bảng quá rộng */
             }
 
+            /* THANH ĐẦU TRANG (TOPBAR THỦY TINH phẳng) */
             .topbar {
-                background: white;
-                border-radius: 24px;
-                padding: 24px 30px;
+                background: rgba(255, 255, 255, 0.85);
+                backdrop-filter: blur(12px);
+                -webkit-backdrop-filter: blur(12px);
+                border: 1px solid rgba(226, 232, 240, 0.8);
+                border-radius: 16px;
+                padding: 16px 28px;
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
-                margin-bottom: 30px;
-                box-shadow: 0 10px 30px rgba(0,0,0,.05);
+                margin-bottom: 32px;
+                box-shadow: 0 4px 20px rgba(15, 23, 42, 0.02);
+                animation: fadeInLayout 0.4s ease-out;
             }
+
+                .topbar h1 {
+                    font-size: 1.35rem;
+                    font-weight: 800;
+                    color: #0f172a;
+                    margin-bottom: 2px;
+                }
 
             .topbar-right {
                 display: flex;
-                gap: 16px;
+                gap: 14px;
                 align-items: center;
             }
 
-            .search-box input {
-                border: none;
-                background: #f3f4f6;
-                padding: 12px 18px;
-                border-radius: 14px;
+            /* Ô tìm kiếm chung của hệ thống */
+            .global-search-box input {
+                border: 1px solid #e2e8f0;
+                background: #f1f5f9;
+                padding: 10px 16px;
+                border-radius: 10px;
                 width: 240px;
                 outline: none;
+                font-size: 0.9rem;
+                transition: all 0.2s;
             }
 
+                .global-search-box input:focus {
+                    background: #ffffff;
+                    border-color: #3b82f6;
+                    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+                }
+
+            /* Nút thông báo */
             .notification-btn {
-                border: none;
-                background: #eff6ff;
-                width: 50px;
-                height: 50px;
-                border-radius: 14px;
-            }
-
-            .dashboard-card {
-                background: white;
-                border-radius: 24px;
-                padding: 24px;
-                box-shadow: 0 10px 30px rgba(0,0,0,.05);
-            }
-            /* STATS */
-
-            .stats-grid {
-                display: grid;
-                grid-template-columns: repeat(4,1fr);
-                gap: 24px;
-                margin-bottom: 30px;
-            }
-
-            .stats-card {
-                padding: 26px;
-                border-radius: 24px;
-                color: white;
+                border: 1px solid #e2e8f0;
+                background: #ffffff;
+                width: 42px;
+                height: 42px;
+                border-radius: 10px;
                 display: flex;
-                justify-content: space-between;
                 align-items: center;
-                box-shadow: 0 15px 30px rgba(0,0,0,.08);
-                transition: .3s;
+                justify-content: center;
+                cursor: pointer;
+                transition: all 0.2s;
             }
 
-                .stats-card:hover {
-                    transform: translateY(-5px);
+                .notification-btn:hover {
+                    background: #f1f5f9;
+                    transform: scale(1.03);
                 }
 
-                .stats-card h3 {
-                    font-size: 36px;
-                    font-weight: bold;
-                }
-
-                .stats-card span {
-                    font-size: 50px;
-                }
-
-            .blue {
-                background: linear-gradient(135deg,#3b82f6,#2563eb);
-            }
-
-            .green {
-                background: linear-gradient(135deg,#10b981,#059669);
-            }
-
-            .orange {
-                background: linear-gradient(135deg,#f59e0b,#d97706);
-            }
-
-            .red {
-                background: linear-gradient(135deg,#ef4444,#dc2626);
-            }
-
-            /* CONTENT */
-
-            .content-grid {
-                display: grid;
-                grid-template-columns: 2fr 1fr;
-                gap: 24px;
-            }
-
-            .dashboard-card {
-                background: white;
-                border-radius: 24px;
-                padding: 24px;
-                box-shadow: 0 10px 30px rgba(0,0,0,.05);
-            }
-
-            .card-header-custom {
-                margin-bottom: 20px;
-            }
-
-                .card-header-custom h4 {
-                    font-weight: bold;
-                }
-
-            /* QUICK ACTION */
-
-            .quick-actions {
-                display: grid;
-                grid-template-columns: repeat(3,1fr);
-                gap: 16px;
-            }
-
-            .action-btn {
-                padding: 18px;
-                border-radius: 18px;
-                text-align: center;
-                text-decoration: none;
-                color: white;
-                font-weight: bold;
-                transition: .3s;
-                box-shadow: 0 10px 20px rgba(0,0,0,.08);
-            }
-
-                .action-btn:hover {
-                    transform: translateY(-3px);
-                    color: white;
-                }
-
-            .primary {
-                background: linear-gradient(135deg,#3b82f6,#2563eb);
-            }
-
-            .success {
-                background: linear-gradient(135deg,#10b981,#059669);
-            }
-
-            .dark {
-                background: linear-gradient(135deg,#111827,#1f2937);
-            }
-
-            /* TABLE */
-
-            .modern-table thead {
-                background: #f9fafb;
-            }
-
-            .modern-table th {
-                border: none;
-                padding: 16px;
-            }
-
-            .modern-table td {
-                padding: 16px;
-                border-top: 1px solid #f3f4f6;
-            }
-
-            .modern-table tbody tr:hover {
-                background: #f8fafc;
-                transition: .2s;
-            }
-
-            /* NOTIFICATION */
-
-            .notification-list {
-                display: flex;
-                flex-direction: column;
-                gap: 16px;
-            }
-
-            .notify {
-                padding: 16px;
-                border-radius: 18px;
-            }
-
-                .notify h6 {
-                    margin-bottom: 6px;
-                    font-weight: bold;
-                }
-
-                .notify p {
-                    margin: 0;
-                    font-size: 14px;
-                }
-
-                .notify.success {
-                    background: #ecfdf5;
-                    color: #065f46;
-                }
-
-                .notify.warning {
-                    background: #fffbeb;
-                    color: #92400e;
-                }
-
-                .notify.info {
-                    background: #eff6ff;
-                    color: #1e40af;
-                }
-
-            /* ACTIVITY */
-
-            .activity-list {
-                list-style: none;
-                padding: 0;
-                margin: 0;
-            }
-
-                .activity-list li {
-                    display: flex;
-                    align-items: center;
-                    gap: 10px;
-                    margin-bottom: 16px;
-                    font-size: 15px;
-                }
-
-            .dot {
-                width: 12px;
-                height: 12px;
-                border-radius: 50%;
-            }
-
-                .dot.green {
-                    background: #10b981;
-                }
-
-                .dot.blue {
-                    background: #3b82f6;
-                }
-
-                .dot.red {
-                    background: #ef4444;
-                }
-
-            /* RESPONSIVE */
-
-            @@media(max-width:992px) {
-
+            /* KHẮC PHỤC TRIỆT ĐỂ LỖI RAZOR MEDIA QUERY */
+            @@media (max-width: 1024px) {
                 .sidebar {
-                    display: none;
+                    transform: translateX(-100%);
+                    position: fixed;
                 }
+
+                    .sidebar.active-mobile {
+                        transform: translateX(0);
+                    }
 
                 .main-content {
                     margin-left: 0;
+                    padding: 20px;
                 }
-
-                .stats-grid {
-                    grid-template-columns: repeat(2,1fr);
-                }
-
-                .content-grid {
-                    grid-template-columns: 1fr;
-                }
+                /* Thêm nút menu mobile nếu cần phát triển về sau */
             }
 
-            @@media(max-width:768px) {
-
-                .stats-grid {
-                    grid-template-columns: 1fr;
-                }
-
-                .quick-actions {
-                    grid-template-columns: 1fr;
-                }
-
+            @@media (max-width: 768px) {
                 .topbar {
                     flex-direction: column;
-                    gap: 20px;
+                    gap: 16px;
                     align-items: flex-start;
+                    padding: 18px;
                 }
 
-                .search-box input {
+                .topbar-right {
                     width: 100%;
+                    justify-content: space-between;
                 }
+
+                .global-search-box {
+                    flex: 1;
+                }
+
+                    .global-search-box input {
+                        width: 100%;
+                    }
             }
 
+            @@keyframes fadeInLayout {
+                from {
+                    opacity: 0;
+                    transform: translateY(-8px);
+                }
+
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
     </style>
-
 </head>
-
 <body>
 
     <div class="admin-wrapper">
 
-        <!-- SIDEBAR -->
-        <aside class="sidebar">
-
+        <aside class="sidebar" id="adminSidebar">
             <div>
-
                 <div class="sidebar-logo">
-
-                    <div class="logo-icon">
-                        CMS
-                    </div>
-
+                    <div class="logo-icon">CMS</div>
                     <div>
                         <h3>QUAN-CMS</h3>
                     </div>
-
                 </div>
 
                 <ul class="sidebar-menu">
-
                     <li>
-                        <a href="/"
-                           class="@(Context.Request.Path == "/" ? "active" : "")">
-                            📊 Dashboard
+                        <a href="/" class="@(Context.Request.Path == "/" ? "active" : "")">
+                            <span>📊</span> Dashboard
                         </a>
                     </li>
-
                     <li>
-                        <a href="/Category"
-                           class="@(Context.Request.Path.StartsWithSegments("/Category") ? "active" : "")">
-                            📂 Danh Mục
+                        <a href="/Category" class="@(Context.Request.Path.StartsWithSegments("/Category") && !Context.Request.Path.StartsWithSegments("/CategoryProduct") ? "active" : "")">
+                            <span>📂</span> Danh Mục Tin Tức
                         </a>
                     </li>
-
                     <li>
-                        <a href="/Post"
-                           class="@(Context.Request.Path.StartsWithSegments("/Post") ? "active" : "")">
-                            📰 Bài Viết
+                        <a href="/Post" class="@(Context.Request.Path.StartsWithSegments("/Post") ? "active" : "")">
+                            <span>📰</span> Bài Viết
                         </a>
                     </li>
-
                     <li>
-                        <a href="/User"
-                           class="@(Context.Request.Path.StartsWithSegments("/User") ? "active" : "")">
-                            👤 Người Dùng
+                        <a href="/CategoryProduct" class="@(Context.Request.Path.StartsWithSegments("/CategoryProduct") ? "active" : "")">
+                            <span>🏷️</span> Danh Mục Sản Phẩm
                         </a>
                     </li>
-
                     <li>
-                        <a href="/CategoryProduct"
-                           class="@(Context.Request.Path.StartsWithSegments("/CategoryProduct") ? "active" : "")">
-                            🏷️ Danh Mục SP
+                        <a href="/Product" class="@(Context.Request.Path.StartsWithSegments("/Product") ? "active" : "")">
+                            <span>🛒</span> Sản Phẩm
                         </a>
                     </li>
-
                     <li>
-                        <a href="/Product"
-                           class="@(Context.Request.Path.StartsWithSegments("/Product") ? "active" : "")">
-                            🛒 Sản Phẩm
+                        <a href="/Order" class="@(Context.Request.Path.StartsWithSegments("/Order") || Context.Request.Path.StartsWithSegments("/OrderDetail") ? "active" : "")">
+                            <span>📦</span> Đơn Hàng Hệ Thống
                         </a>
                     </li>
-
+                    <li class="py-2"><hr style="border-color: #334155; margin: 0;" /></li>
                     <li>
-                        <a href="/Customer"
-                           class="@(Context.Request.Path.StartsWithSegments("/Customer") ? "active" : "")">
-                            👥 Khách Hàng
+                        <a href="/User" class="@(Context.Request.Path.StartsWithSegments("/User") ? "active" : "")">
+                            <span>👤</span> Quản Trị Viên
                         </a>
                     </li>
-
                     <li>
-                        <a href="/Order"
-                           class="@(Context.Request.Path.StartsWithSegments("/Order") ? "active" : "")">
-                            📦 Đơn Hàng
+                        <a href="/Customer" class="@(Context.Request.Path.StartsWithSegments("/Customer") ? "active" : "")">
+                            <span>👥</span> Tài Khoản Khách Hàng
                         </a>
                     </li>
-
-                    <li>
-                        <a href="/OrderDetail"
-                           class="@(Context.Request.Path.StartsWithSegments("/OrderDetail") ? "active" : "")">
-                            🧾 Chi Tiết Đơn
-                        </a>
-                    </li>
-
                 </ul>
-
             </div>
 
             <div class="sidebar-footer">
-
                 @if (User.Identity.IsAuthenticated)
                 {
                     <div class="admin-user d-flex align-items-center gap-3">
-
-                        <!-- Avatar -->
-                        <img src="https://i.pravatar.cc/100?u=@User.Identity.Name"
-                             style="width:45px;height:45px;border-radius:50%;border:2px solid #3b82f6;" />
-
-                        <!-- Info -->
-                        <div class="flex-grow-1">
-                            <h6 class="mb-0 text-white fw-semibold">
+                        <img src="https://i.pravatar.cc/100?u=@User.Identity.Name" alt="Avatar User" />
+                        <div class="flex-grow-1 min-w-0">
+                            <h6 class="mb-0 text-white fw-bold text-truncate" style="font-size: 0.9rem;">
                                 @User.FindFirst("FullName")?.Value
                             </h6>
-
-                            <small class="text-muted">
+                            <small class="text-muted d-block text-truncate" style="font-size: 0.75rem;">
                                 @User.Identity.Name
                             </small>
-
-                            <div class="mt-1">
-                                <span class="badge bg-primary">
-                                    @User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value
-                                </span>
-                            </div>
+                            <span class="badge bg-primary mt-1" style="font-size: 0.7rem; padding: 3px 6px;">
+                                @User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value
+                            </span>
                         </div>
-
                     </div>
-
-                    <!-- Logout -->
                     <div class="mt-3">
-                        <a asp-controller="Account"
-                           asp-action="Logout"
-                           class="btn btn-danger btn-sm w-100 fw-semibold"
-                           style="border-radius:12px;">
+                        <a asp-controller="Account" asp-action="Logout" class="btn btn-sm btn-outline-danger w-100 fw-bold border-0" style="border-radius:10px; background: rgba(239,68,68,0.1)">
                             🚪 Đăng xuất
                         </a>
                     </div>
@@ -537,62 +344,43 @@
                 else
                 {
                     <div class="text-center text-muted mb-2">
-                        <small>Chưa đăng nhập</small>
+                        <small style="font-size: 0.8rem;">Hệ thống chưa đăng nhập</small>
                     </div>
-
-                    <a asp-controller="Account"
-                       asp-action="Login"
-                       class="btn btn-primary btn-sm w-100 fw-semibold"
-                       style="border-radius:12px;">
-                        🔐 Đăng nhập
+                    <a asp-controller="Account" asp-action="Login" class="btn btn-primary btn-sm w-100 fw-bold" style="border-radius:10px;">
+                        🔐 Đăng nhập hệ thống
                     </a>
                 }
-
             </div>
-
         </aside>
 
-        <!-- MAIN -->
         <main class="main-content">
 
-            <!-- TOPBAR -->
             <div class="topbar">
-
                 <div>
-                    <h1 class="fw-bold">
-                        @ViewData["Title"]
-                    </h1>
-
-                    <p class="text-muted mb-0">
-                        Xin chào Admin 👋
+                    <h1>@ViewData["Title"]</h1>
+                    <p class="text-muted mb-0" style="font-size: 0.85rem; font-weight: 500;">
+                        Hệ thống quản lý nội dung & thương mại điện tử chuyên sâu ⚡
                     </p>
                 </div>
 
                 <div class="topbar-right">
-
-                    <div class="search-box">
-                        <input type="text"
-                               placeholder="Tìm kiếm..." />
+                    <div class="global-search-box">
+                        <input type="text" placeholder="Tìm tác vụ nhanh..." />
                     </div>
-
-                    <button class="notification-btn">
+                    <button class="notification-btn" title="Thông báo hệ thống">
                         🔔
                     </button>
-
                 </div>
-
             </div>
 
             @RenderBody()
 
         </main>
-
     </div>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 
     @await RenderSectionAsync("Scripts", required: false)
-
 </body>
 </html>

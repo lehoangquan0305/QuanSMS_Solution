@@ -30,6 +30,9 @@ namespace CMS.Backend.Controllers
                     p.Title,
                     p.ImageUrl,
                     p.CreatedDate,
+
+                    p.CategoryId,
+
                     CategoryName = p.Category.Name
                 })
                 .ToListAsync();
@@ -111,5 +114,6 @@ namespace CMS.Backend.Controllers
                 data = model
             });
         }
+
     }
 }

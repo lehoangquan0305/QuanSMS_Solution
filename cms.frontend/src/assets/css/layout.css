@@ -1,0 +1,145 @@
+/* ================= HEADER ================= */
+.header {
+    background: #0f172a;
+    color: white;
+    padding: 15px 0;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 20px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    color: #38bdf8;
+}
+
+/* NAV */
+.nav-menu {
+    display: flex;
+    gap: 20px;
+}
+
+    .nav-menu a {
+        color: white;
+        text-decoration: none;
+        font-weight: 500;
+        transition: 0.3s;
+        position: relative;
+    }
+
+        .nav-menu a::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: -5px;
+            width: 0%;
+            height: 2px;
+            background: #38bdf8;
+            transition: 0.3s;
+        }
+
+        .nav-menu a:hover {
+            color: #38bdf8;
+        }
+
+            .nav-menu a:hover::after {
+                width: 100%;
+            }
+
+/* SEARCH */
+.search-box input {
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: none;
+    outline: none;
+}
+
+/* ================= FOOTER ================= */
+.footer {
+    background: #0f172a;
+    color: #cbd5e1;
+    padding: 40px 0;
+    text-align: center;
+    margin-top: 50px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+}
+
+    .footer h5 {
+        color: white;
+        margin-bottom: 10px;
+    }
+
+    .footer p {
+        margin: 5px 0;
+        font-size: 14px;
+    }
+.auth-box {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.auth-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-login,
+.btn-register {
+    padding: 6px 12px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.btn-login {
+    background: #fff;
+    color: #000;
+    border: 1px solid #ddd;
+}
+
+.btn-register {
+    background: #000;
+    color: #fff;
+}
+
+.user-menu {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.avatar {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    background: #111;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+}
+
+.btn-logout {
+    background: red;
+    color: #fff;
+    border: none;
+    padding: 6px 10px;
+    border-radius: 8px;
+}

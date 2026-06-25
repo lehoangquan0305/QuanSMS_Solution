@@ -3,6 +3,7 @@ using CMS.Data.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using X.PagedList;
 
 namespace CMS.Backend.Controllers
 {
@@ -19,8 +20,10 @@ namespace CMS.Backend.Controllers
         // =========================
         // DANH SÁCH + LỌC DANH MỤC
         // =========================
-        public IActionResult Index(int? id)
+        public IActionResult Index(int? id, int page = 1)
         {
+            int pageSize = 3;
+
             var query = _context.Posts
                 .Include(p => p.Category)
                 .OrderByDescending(p => p.CreatedDate)
@@ -32,9 +35,18 @@ namespace CMS.Backend.Controllers
                 query = query.Where(p => p.CategoryId == id);
             }
 
-            var posts = query.ToList();
+            int totalPosts = query.Count();
+
+            var posts = query
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
 
             ViewBag.CategoryId = id;
+            ViewBag.CurrentPage = page;
+
+            ViewBag.TotalPages =
+                (int)Math.Ceiling((double)totalPosts / pageSize);
 
             return View(posts);
         }

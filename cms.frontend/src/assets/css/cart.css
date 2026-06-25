@@ -1,0 +1,131 @@
+.cart-page {
+    background: #f8f9fa;
+    min-height: 100vh;
+}
+
+.cart-title {
+    font-weight: 800;
+    margin-bottom: 30px;
+}
+
+.cart-item-card {
+    background: white;
+    border-radius: 20px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 8px 25px rgba(0,0,0,.08);
+    transition: .3s;
+}
+
+    .cart-item-card:hover {
+        transform: translateY(-5px);
+    }
+
+.cart-image {
+    width: 140px;
+    height: 140px;
+    object-fit: cover;
+    border-radius: 15px;
+}
+
+.cart-info {
+    flex: 1;
+}
+
+    .cart-info h4 {
+        font-weight: 700;
+    }
+
+.cart-price {
+    color: #dc3545;
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.qty-box {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+    .qty-box button {
+        width: 40px;
+        height: 40px;
+        border: none;
+        border-radius: 10px;
+        font-size: 20px;
+        font-weight: bold;
+        background: black;
+        color: white;
+    }
+
+    .qty-box span {
+        font-size: 18px;
+        font-weight: 700;
+    }
+
+.cart-right {
+    text-align: right;
+}
+
+.remove-btn {
+    border: none;
+    background: #dc3545;
+    color: white;
+    padding: 8px 15px;
+    border-radius: 10px;
+}
+
+.summary-card {
+    background: white;
+    border-radius: 20px;
+    padding: 30px;
+    position: sticky;
+    top: 20px;
+    box-shadow: 0 8px 25px rgba(0,0,0,.08);
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+}
+
+.summary-total {
+    display: flex;
+    justify-content: space-between;
+    font-size: 24px;
+    font-weight: 800;
+    color: #dc3545;
+}
+
+.checkout-btn {
+    display: block;
+    text-align: center;
+    background: black;
+    color: white;
+    padding: 15px;
+    border-radius: 12px;
+    margin-top: 25px;
+    text-decoration: none;
+    font-weight: 700;
+    transition: .3s;
+}
+
+    .checkout-btn:hover {
+        background: #222;
+        color: white;
+    }
+
+.empty-cart {
+    text-align: center;
+    padding: 100px 0;
+}
+
+.empty-icon {
+    font-size: 100px;
+    margin-bottom: 20px;
+}

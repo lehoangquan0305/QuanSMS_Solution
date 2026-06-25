@@ -88,5 +88,31 @@ namespace CMS.Backend.Controllers
                     : ""
             });
         }
+        // ==========================
+        // GET: api/products/search/{keyword}
+        // ==========================
+        [HttpGet("search/{keyword}")]
+        public async Task<IActionResult> Search(string keyword)
+        {
+            if (string.IsNullOrWhiteSpace(keyword))
+            {
+                return BadRequest("Từ khóa tìm kiếm không được để trống.");
+            }
+
+            // Tìm sản phẩm theo tên (không phân biệt hoa thường)
+            var products = await _context.Products
+                .Where(p => p.Name.ToLower().Contains(keyword.ToLower()))
+                .Select(p => new
+                {
+                    p.Id,
+                    p.Name,
+                    p.Price,
+                    p.ImageUrl,
+                    p.StockQuantity
+                })
+                .ToListAsync();
+
+            return Ok(products);
+        }
     }
 }

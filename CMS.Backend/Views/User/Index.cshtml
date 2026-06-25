@@ -4,162 +4,335 @@
     ViewData["Title"] = "Quản Lý Thành Viên";
 }
 
-<div class="container mt-4">
+<div class="container-fluid px-4 py-4 animate-fade-in" style="font-family: 'Segoe UI', sans-serif;">
 
-    <!-- Header -->
-    <div class="d-flex justify-content-between align-items-center mb-4">
+    <!-- HEADER DASHBOARD NÂNG CẤP -->
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3 page-header-animate">
         <div>
-            <h2 class="fw-bold text-dark">
-                QUẢN LÝ THÀNH VIÊN
+            <h2 class="fw-black text-dark mb-1 text-uppercase d-flex align-items-center gap-2">
+                <span class="pulse-icon">👥</span> QUẢN LÝ THÀNH VIÊN
             </h2>
-
-            <p class="text-muted mb-0">
-                Danh sách tài khoản quản trị hệ thống
+            <p class="text-muted mb-0 fw-semibold">
+                Quản lý danh sách tài khoản, vai trò và quyền hạn truy cập hệ thống
             </p>
         </div>
-
-        <a href="/User/Create"
-           class="btn btn-success shadow-sm">
-            + Thêm thành viên mới
+        <a href="/User/Create" class="btn btn-gradient-success d-flex align-items-center gap-2 px-4 py-2 fw-bold">
+            <span>➕</span> Thêm thành viên mới
         </a>
     </div>
 
-    <!-- Card -->
-    <div class="card border-0 shadow-lg">
-
-        <div class="card-body">
-
+    <!-- BẢNG DANH SÁCH CHÍNH -->
+    <div class="card card-premium shadow border-0 overflow-hidden">
+        <div class="card-body p-0">
             <div class="table-responsive">
-
-                <table class="table table-hover align-middle">
-
-                    <thead class="table-dark">
+                <table class="table table-custom align-middle mb-0">
+                    <thead>
                         <tr>
-                            <th width="80">ID</th>
-                            <th>Tên Đăng Nhập</th>
-                            <th>Họ Và Tên</th>
-                            <th width="150">Quyền Hạn</th>
-                            <th width="180" class="text-center">
-                                Thao Tác
-                            </th>
+                            <th width="80" class="ps-4">ID</th>
+                            <th>Tài khoản</th>
+                            <th>Họ và Tên</th>
+                            <th width="180">Quyền hạn</th>
+                            <th width="200" class="text-center pe-4">Thao tác</th>
                         </tr>
                     </thead>
-
                     <tbody>
-
                         @foreach (var user in Model)
                         {
-                            <tr>
-
-                                <td>
-                                    <strong>#@user.Id</strong>
+                            <tr class="table-row-hover">
+                                <td class="ps-4 text-secondary fw-bold">
+                                    #@user.Id
                                 </td>
-
                                 <td>
-                                    <span class="fw-semibold text-primary">
-                                        @user.Username
-                                    </span>
+                                    <div class="d-flex align-items-center gap-3">
+                                        <!-- Avatar giả lập theo chữ cái đầu của Username -->
+                                        <div class="avatar-circle-admin @(user.Role == "Administrator" ? "avatar-admin" : "avatar-user")">
+                                            @(string.IsNullOrEmpty(user.Username) ? "U" : user.Username.Substring(0, 1).ToUpper())
+                                        </div>
+                                        <div>
+                                            <span class="fw-bold text-dark d-block">@user.Username</span>
+                                            <small class="text-muted">Hệ thống thành viên</small>
+                                        </div>
+                                    </div>
                                 </td>
-
                                 <td>
-                                    @user.FullName
+                                    <span class="fw-semibold text-secondary">@user.FullName</span>
                                 </td>
-
                                 <td>
                                     @if (user.Role == "Administrator")
                                     {
-                                        <span class="badge bg-danger px-3 py-2">
-                                            Administrator
+                                        <span class="badge bg-soft-danger text-danger badge-role px-3 py-2">
+                                            🛡️ Administrator
                                         </span>
                                     }
                                     else if (user.Role == "Editor")
                                     {
-                                        <span class="badge bg-info text-dark px-3 py-2">
-                                            Editor
+                                        <span class="badge bg-soft-info text-info badge-role px-3 py-2">
+                                            ✍️ Editor
                                         </span>
                                     }
                                     else
                                     {
-                                        <span class="badge bg-secondary px-3 py-2">
-                                            @user.Role
+                                        <span class="badge bg-soft-secondary text-secondary badge-role px-3 py-2">
+                                            👤 @user.Role
                                         </span>
                                     }
                                 </td>
-
-                                <td class="text-center">
-
-                                    <a href="/User/Edit/@user.Id"
-                                       class="btn btn-sm btn-outline-warning me-1">
-                                        ✏ Sửa
-                                    </a>
-
-                                    <!-- BUTTON XÓA MỚI (MODAL) -->
-                                    <a href="#"
-                                       class="btn btn-sm btn-outline-danger"
-                                       data-bs-toggle="modal"
-                                       data-bs-target="#deleteModal"
-                                       data-id="@user.Id"
-                                       data-name="@user.Username">
-                                        🗑 Xóa
-                                    </a>
-
+                                <td class="text-center pe-4">
+                                    <div class="d-flex justify-content-center gap-2">
+                                        <a href="/User/Edit/@user.Id" class="btn btn-action btn-action-edit" title="Sửa thông tin">
+                                            ✏️ Sửa
+                                        </a>
+                                        <button class="btn btn-action btn-action-delete"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#deleteModal"
+                                                data-id="@user.Id"
+                                                data-name="@user.Username"
+                                                title="Xóa tài khoản">
+                                            🗑️ Xóa
+                                        </button>
+                                    </div>
                                 </td>
-
                             </tr>
                         }
-
                     </tbody>
-
                 </table>
-
             </div>
-
-        </div>
-
-    </div>
-
-</div>
-
-<!-- MODAL CONFIRM DELETE -->
-<div class="modal fade" id="deleteModal" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-
-            <div class="modal-header bg-danger text-white">
-                <h5 class="modal-title">Xác nhận xóa</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-
-            <div class="modal-body">
-                Bạn có chắc muốn xóa user:
-                <strong id="userName"></strong> ?
-            </div>
-
-            <div class="modal-footer">
-                <a id="confirmDeleteBtn" class="btn btn-danger">Xóa</a>
-                <button class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-            </div>
-
         </div>
     </div>
 </div>
 
-<!-- SCRIPT HANDLE MODAL -->
+<!-- MODAL CONFIRM DELETE NÂNG CẤP KÍNH MỜ -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
+            <div class="modal-header bg-danger text-white py-3">
+                <h5 class="modal-title fw-bold d-flex align-items-center gap-2">
+                    ⚠️ Xác Nhận Xóa Tài Khoản
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4 text-center">
+                <div class="fs-1 text-danger mb-3 animate-bounce">🚨</div>
+                <h5 class="text-dark fw-bold mb-2">Bạn có chắc chắn muốn xóa?</h5>
+                <p class="text-muted mb-0">Hành động này sẽ gỡ bỏ tài khoản quản trị <strong class="text-danger fs-5 d-block mt-2" id="userName"></strong> ra khỏi hệ thống vĩnh viễn.</p>
+            </div>
+            <div class="modal-footer bg-light border-0 d-flex gap-2 justify-content-center py-3">
+                <button type="button" class="btn btn-light border px-4 fw-bold" data-bs-dismiss="modal">Hủy bỏ</button>
+                <a id="confirmDeleteBtn" class="btn btn-danger px-4 fw-bold shadow-sm">Xóa ngay</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- BLOCK CSS TÙY CHỈNH CHUYÊN NGHIỆP -->
+<style>
+    .fw-black {
+        font-weight: 900 !important;
+    }
+
+    /* Hiệu ứng Hoạt họa mượt */
+    .page-header-animate {
+        animation: slideDownAdmin 0.4s ease-out;
+    }
+
+    .pulse-icon {
+        display: inline-block;
+        animation: pulseEffect 2s infinite ease-in-out;
+    }
+
+    /* Thẻ Card Chứa Bảng */
+    .card-premium {
+        border-radius: 16px;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.03) !important;
+        background: #ffffff;
+    }
+
+    /* Style Bảng dữ liệu */
+    .table-custom {
+        border-collapse: separate;
+        border-spacing: 0;
+    }
+
+        .table-custom thead th {
+            background: #0f172a;
+            color: #f8fafc;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 0.5px;
+            padding: 18px 12px;
+            border: none;
+        }
+
+        .table-custom tbody tr {
+            transition: all 0.2s ease;
+        }
+
+    .table-row-hover:hover {
+        background-color: #f8fafc !important;
+    }
+
+    /* Tạo Avatar tròn đại diện */
+    .avatar-circle-admin {
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 800;
+        font-size: 1.1rem;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+
+    .avatar-admin {
+        background: #fee2e2;
+        color: #dc2626;
+    }
+
+    .avatar-user {
+        background: #e0f2fe;
+        color: #0284c7;
+    }
+
+    /* Custom Badge vai trò nhẹ nhàng */
+    .badge-role {
+        font-weight: 700;
+        border-radius: 30px;
+        font-size: 0.8rem;
+        letter-spacing: 0.2px;
+    }
+
+    .bg-soft-danger {
+        background: #fee2e2;
+    }
+
+    .bg-soft-info {
+        background: #e0f2fe;
+    }
+
+    .bg-soft-secondary {
+        background: #f1f5f9;
+    }
+
+    /* Nút thêm mới Gradient */
+    .btn-gradient-success {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        color: #fff;
+        border: none;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(16, 185, 129, 0.25);
+        transition: all 0.25s ease;
+    }
+
+        .btn-gradient-success:hover {
+            color: #fff;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.35);
+        }
+
+    /* Cụm nút hành động Sửa / Xóa */
+    .btn-action {
+        border: none;
+        padding: 6px 14px;
+        border-radius: 8px;
+        font-size: 0.85rem;
+        font-weight: 700;
+        transition: all 0.2s ease;
+    }
+
+    .btn-action-edit {
+        background: #fef3c7;
+        color: #d97706;
+        text-decoration: none;
+    }
+
+        .btn-action-edit:hover {
+            background: #d97706;
+            color: #fff;
+        }
+
+    .btn-action-delete {
+        background: #fee2e2;
+        color: #dc2626;
+    }
+
+        .btn-action-delete:hover {
+            background: #dc2626;
+            color: #fff;
+        }
+
+    /* Hiệu ứng nảy cảnh báo của Modal */
+    .animate-bounce {
+        animation: bounceEffect 0.6s infinite alternate;
+    }
+
+    /* Sửa dấu @@ để Razor không hiểu nhầm lệnh C# */
+    @@keyframes slideDownAdmin {
+        from {
+            opacity: 0;
+            transform: translateY(-15px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @@keyframes pulseEffect {
+        0%, 100% {
+            transform: scale(1);
+        }
+
+        50% {
+            transform: scale(1.15);
+        }
+    }
+
+    .animate-fade-in {
+        animation: fadeInAdmin 0.5s cubic-bezier(0.16, 1, 0.3, 1) ease;
+    }
+
+    @@keyframes fadeInAdmin {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @@keyframes bounceEffect {
+        from {
+            transform: translateY(0);
+        }
+
+        to {
+            transform: translateY(-8px);
+        }
+    }
+</style>
+
+<!-- SCRIPT HANDLE MODAL MƯỢT MÀ -->
 <script>
-    var deleteModal = document.getElementById('deleteModal');
+    document.addEventListener("DOMContentLoaded", function () {
+        var deleteModal = document.getElementById('deleteModal');
+        if (deleteModal) {
+            deleteModal.addEventListener('show.bs.modal', function (event) {
+                var button = event.relatedTarget;
+                var userId = button.getAttribute('data-id');
+                var userName = button.getAttribute('data-name');
 
-    deleteModal.addEventListener('show.bs.modal', function (event) {
-
-        var button = event.relatedTarget;
-
-        var userId = button.getAttribute('data-id');
-        var userName = button.getAttribute('data-name');
-
-        document.getElementById('userName').textContent = userName;
-
-        document.getElementById('confirmDeleteBtn').setAttribute(
-            'href',
-            '/User/Delete/' + userId
-        );
+                document.getElementById('userName').textContent = userName;
+                document.getElementById('confirmDeleteBtn').setAttribute(
+                    'href',
+                    '/User/Delete/' + userId
+                );
+            });
+        }
     });
 </script>

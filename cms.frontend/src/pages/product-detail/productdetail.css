@@ -1,0 +1,70 @@
+.cart-toast {
+    position: fixed;
+    top: 30px;
+    right: 30px;
+    width: 360px;
+    background: white;
+    border-radius: 20px;
+    padding: 15px;
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    box-shadow: 0 15px 40px rgba(0,0,0,.15);
+    z-index: 9999;
+    animation: slideIn .4s ease;
+}
+
+    .cart-toast img {
+        width: 70px;
+        height: 70px;
+        object-fit: cover;
+        border-radius: 12px;
+    }
+
+    .cart-toast h6 {
+        margin: 0;
+        color: #198754;
+        font-weight: 700;
+    }
+
+    .cart-toast p {
+        margin: 4px 0;
+        font-size: 14px;
+        font-weight: 600;
+        color: #333;
+    }
+
+/* Thùng chứa phần giá và số lượng */
+.cart-toast-footer {
+    display: flex;
+    justifyContent: space-between;
+    align-items: center;
+    margin-top: 4px;
+}
+
+.cart-toast span {
+    color: #dc3545;
+    font-weight: bold;
+}
+
+/* Badge số lượng mới thêm vào */
+.cart-toast .qty-badge {
+    background: #e2e8f0;
+    color: #475569;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 10px;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(100px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
