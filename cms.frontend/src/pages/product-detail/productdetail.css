@@ -19,6 +19,7 @@
         height: 70px;
         object-fit: cover;
         border-radius: 12px;
+        flex-shrink: 0; /* Giữ ảnh nguyên kích thước không bị móp */
     }
 
     .cart-toast h6 {

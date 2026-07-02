@@ -3,6 +3,8 @@ import LatestBlog from "./LatestBlog";
 import CategoryMenu from "./CategoryMenu";
 import ProductGrid from "./ProductGrid";
 import HeroBanner from "./HeroBanner";
+import LatestProducts from "./LatestProducts"; // 🔥 Thêm vùng sản phẩm mới
+import HotProducts from "./HotProducts";       // 🔥 Thêm vùng sản phẩm Hot
 import "./home.css";
 
 function Home() {
@@ -13,6 +15,12 @@ function Home() {
         <div className="main-cyber-wrapper">
             {/* HERO BANNER */}
             <HeroBanner />
+
+            {/* ================= TIÊU CHÍ 36: SẢN PHẨM MỚI NHẤT ================= */}
+            <LatestProducts />
+
+            {/* ================= TIÊU CHÍ 37: SẢN PHẨM HOT BÁN CHẠY ================= */}
+            <HotProducts />
 
             {/* CATEGORY */}
             <section className="section-block-cyber">
@@ -32,7 +40,7 @@ function Home() {
                     {/* Tiêu đề lọc sản phẩm thông minh */}
                     <div className="product-filter-header-cyber mb-4">
                         <h3 className="filter-title-cyber fw-mono-home text-white">
-                            {categoryId ? "👟 SẢN PHẨM THEO DANH MỤC" : "🔥 SẢN PHẨM NỔI BẬT"}
+                            {categoryId ? "👟 SẢN PHẨM THEO DANH MỤC" : "🔥 TẤT CẢ SẢN PHẨM"}
                         </h3>
                         <span className="live-status-pulse"></span>
                     </div>

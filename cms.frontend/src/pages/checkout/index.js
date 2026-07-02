@@ -86,8 +86,8 @@ function Checkout() {
                     quantity: item.quantity
                 }))
             };
-
-            const res = await fetch("https://localhost:7052/api/Orders", {
+            const API_URL = process.env.REACT_APP_API_URL;
+            const res = await fetch(`${API_URL}/Orders`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"

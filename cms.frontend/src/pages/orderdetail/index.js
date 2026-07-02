@@ -10,7 +10,11 @@ function OrderDetail() {
     useEffect(() => {
         const fetchOrderDetail = async () => {
             try {
-                const res = await fetch(`https://localhost:7052/api/orders/${id}`);
+                // Dùng process.env.REACT_APP_API_URL để lấy giá trị từ file .env
+                const API_URL = process.env.REACT_APP_API_URL;
+
+                // Gọi API
+                const res = await fetch(`${API_URL}/orders/${id}`);
                 if (res.ok) {
                     const data = await res.json();
                     setOrderData(data);
@@ -41,6 +45,18 @@ function OrderDetail() {
         return new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND" }).format(value);
     };
 
+    // Hàm chuyển đổi số sang chữ trạng thái
+    const getStatusLabel = (status) => {
+        const s = parseInt(status);
+        switch (s) {
+            case 0: return "Chờ xử lý";
+            case 1: return "Đang giao";
+            case 2: return "Đã hoàn thành";
+            case 3: return "Đã hủy";
+            default: return "Không xác định";
+        }
+    };
+
     if (loading) return (
         <div className="loader-container">
             <div className="spinner-cyber"></div>
@@ -50,26 +66,25 @@ function OrderDetail() {
 
     if (!orderData || !targetInfo) return <div className="text-center py-5 text-danger fw-bold">❌ Không tìm thấy dữ liệu đơn hàng!</div>;
 
-    // Xác định bước tiến trình dựa trên trạng thái
-    const statusStr = (targetInfo.status || targetInfo.Status || "").toLowerCase();
-    let currentStep = 1;
-    if (statusStr.includes("giao") || statusStr.includes("shipping")) currentStep = 2;
-    if (statusStr.includes("thành") || statusStr.includes("complete")) currentStep = 3;
-    if (statusStr.includes("hủy") || statusStr.includes("cancel")) currentStep = 0; // Đơn bị hủy
+    // Lấy giá trị số của status
+    const statusValue = parseInt(targetInfo.status || targetInfo.Status || 0);
+
+    // Logic cho tiến trình: Nếu status là 3 (Đã hủy) thì currentStep = 0 (tự ẩn timeline)
+    let currentStep = 0;
+    if (statusValue === 0) currentStep = 1;
+    else if (statusValue === 1) currentStep = 2;
+    else if (statusValue === 2) currentStep = 3;
 
     return (
         <div className="order-detail-cyber-bg py-5">
             <div className="container position-relative z-2">
-                {/* Nút quay lại với hiệu ứng hover trượt trái */}
                 <button className="btn-back-glow mb-4" onClick={() => navigate("/orders")}>
                     <span className="arrow">←</span> Quay lại danh sách đơn hàng
                 </button>
 
-                {/* Khung chứa hiệu ứng Kính cường lực (Glassmorphism) */}
                 <div className="cyber-card p-4 p-md-5 rounded-4 position-relative overflow-hidden">
                     <div className="cyber-shimmer"></div>
 
-                    {/* Header đơn hàng - Hiệu ứng Glow chữ */}
                     <div className="d-flex flex-column flex-md-row justify-content-between align-items-md-center border-bottom border-cyber pb-4 mb-5 g-3">
                         <div>
                             <h2 className="fw-black text-white text-glow mb-2 animate-text-slide">
@@ -80,13 +95,14 @@ function OrderDetail() {
                             </span>
                         </div>
                         <div className="mt-2 mt-md-0">
-                            <span className={`badge-cyber ${currentStep === 0 ? "badge-cyber-danger" : "badge-cyber-success"}`}>
-                                {targetInfo.status || targetInfo.Status}
+                            {/* Hiển thị badge theo số status, nếu là 3 (Đã hủy) thì báo đỏ */}
+                            <span className={`badge-cyber ${statusValue === 3 ? "badge-cyber-danger" : "badge-cyber-success"}`}>
+                                {getStatusLabel(statusValue)}
                             </span>
                         </div>
                     </div>
 
-                    {/* TRÊN CÙNG: THANH TIẾN TRÌNH HOẠT HỌA (TRACKER LINH HOẠT) */}
+                    {/* Timeline ẩn đi khi statusValue là 3 */}
                     {currentStep > 0 && (
                         <div className="row justify-content-center mb-5">
                             <div className="col-12 col-lg-10">
@@ -116,7 +132,6 @@ function OrderDetail() {
                         </div>
                     )}
 
-                    {/* DANH SÁCH SẢN PHẨM HOẠT HỌA HOVER */}
                     <h5 className="fw-bold text-white mb-3 tracking-wide d-flex align-items-center">
                         <span className="cyber-dot me-2"></span> DANH SÁCH SẢN PHẨM ĐÃ ĐẶT
                     </h5>
@@ -151,7 +166,6 @@ function OrderDetail() {
                         </table>
                     </div>
 
-                    {/* KHỐI TỔNG KẾT VÀ GHI CHÚ */}
                     <div className="row g-4 mt-2">
                         <div className="col-md-7">
                             <div className="cyber-notes-box p-3 rounded-3 position-relative">

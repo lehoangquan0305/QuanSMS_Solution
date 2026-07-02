@@ -18,6 +18,9 @@ import Login from "./pages/login";
 import Profile from "./pages/Profile/Profile";
 import Orders from "./pages/order";
 import OrderDetail from "./pages/orderdetail";
+import ChangePassword from "./pages/ChangePassword";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
 
 function App() {
     return (
@@ -63,6 +66,9 @@ function App() {
                     <Route path="/profile" element={<Profile />} />
                     <Route path="/orders" element={<Orders />} />
                     <Route path="/orders/:id" element={<OrderDetail />} />
+                    <Route path="/change-password" element={<ChangePassword />} />
+                    <Route path="/forgot-password" element={<ForgotPassword />} />
+                    <Route path="/reset-password" element={<ResetPassword />} />
 
                 </Route>
 

@@ -43,7 +43,8 @@ function Profile() {
         setMessage({ type: "", text: "" });
 
         try {
-            const res = await fetch("https://localhost:7052/api/auth/update-profile", {
+            const API_URL = process.env.REACT_APP_API_URL;
+            const res = await fetch(`${API_URL}/auth/update-profile`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({

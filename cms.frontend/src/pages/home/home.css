@@ -309,3 +309,161 @@
         text-align: center;
     }
 }
+/* ===== ĐOẠN CSS BỔ SUNG CHO SẢN PHẨM MỚI VÀ HOT ĐỒNG BỘ CYBERPUNK ===== */
+.text-glow-cyan {
+    text-shadow: 0 0 15px rgba(6, 182, 212, 0.6);
+    color: #22d3ee !important;
+}
+
+.text-glow-magenta {
+    text-shadow: 0 0 15px rgba(255, 0, 127, 0.6);
+    color: #ff007f !important;
+}
+
+.cyber-divider-home-magenta {
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(90deg, #ff007f, #b91c1c);
+    box-shadow: 0 0 8px #ff007f;
+    border-radius: 2px;
+}
+
+/* Row bọc ngoài linh hoạt */
+.home-product-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+}
+
+/* Card thiết kế kính cường lực cao cấp */
+.home-product-card {
+    background: rgba(17, 24, 39, 0.6);
+    border-radius: 16px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+.border-cyan {
+    border: 1px solid rgba(6, 182, 212, 0.2);
+}
+
+    .border-cyan:hover {
+        border-color: #22d3ee;
+        box-shadow: 0 0 20px rgba(6, 182, 212, 0.25);
+        transform: translateY(-4px);
+    }
+
+.border-magenta {
+    border: 1px solid rgba(255, 0, 127, 0.2);
+}
+
+    .border-magenta:hover {
+        border-color: #ff007f;
+        box-shadow: 0 0 20px rgba(255, 0, 127, 0.25);
+        transform: translateY(-4px);
+    }
+
+/* Thùng chứa ảnh */
+.home-product-card .img-box {
+    width: 100%;
+    height: 240px;
+    overflow: hidden;
+    background: #090d16;
+}
+
+    .home-product-card .img-box img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.5s ease;
+    }
+
+.home-product-card:hover .img-box img {
+    transform: scale(1.06);
+}
+
+/* Khu vực thông tin */
+.home-product-card .info-box {
+    padding: 20px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    flex-grow: 1;
+}
+
+    .home-product-card .info-box h4 {
+        font-size: 16px;
+        color: #fff;
+        margin: 0;
+        text-transform: uppercase;
+    }
+
+    .home-product-card .info-box .price {
+        font-weight: 700;
+        font-size: 16px;
+        margin: 0;
+        font-family: monospace;
+    }
+
+.text-cyan {
+    color: #22d3ee;
+}
+
+.text-magenta {
+    color: #ff007f;
+}
+
+/* Buttons Techwear tương ứng */
+.btn-action-cyan {
+    background: transparent;
+    border: 1px solid #06b6d4;
+    color: #22d3ee;
+    padding: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 12px;
+    letter-spacing: 1px;
+    transition: all 0.2s ease;
+}
+
+    .btn-action-cyan:hover {
+        background: #06b6d4;
+        color: #000;
+        box-shadow: 0 0 10px #06b6d4;
+    }
+
+.btn-action-magenta {
+    background: transparent;
+    border: 1px solid #ff007f;
+    color: #ff007f;
+    padding: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 12px;
+    letter-spacing: 1px;
+    transition: all 0.2s ease;
+}
+
+    .btn-action-magenta:hover {
+        background: #ff007f;
+        color: #000;
+        box-shadow: 0 0 10px #ff007f;
+    }
+
+/* Responsive */
+@media (max-width: 992px) {
+    .home-product-row {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 576px) {
+    .home-product-row {
+        grid-template-columns: 1fr;
+    }
+}

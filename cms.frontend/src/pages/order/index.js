@@ -18,7 +18,8 @@ function Orders() {
         const fetchOrders = async () => {
             try {
                 const customerId = storedUser.id || storedUser.Id;
-                const res = await fetch(`https://localhost:7052/api/orders/customer/${customerId}`);
+                const API_URL = process.env.REACT_APP_API_URL;
+                const res = await fetch(`${API_URL}/orders/customer/${customerId}`);
                 if (res.ok) {
                     const data = await res.json();
                     setOrders(data);
@@ -44,19 +45,14 @@ function Orders() {
         });
     };
 
-    // Hàm xuất badge trạng thái phát sáng cực chất theo logic text
     const renderStatusBadge = (status) => {
-        const statusStr = (status || "").toLowerCase();
-        if (statusStr.includes("giao") || statusStr.includes("shipping")) {
-            return <span className="badge-cyber badge-cyber-info">🚚 Đang giao hàng</span>;
-        }
-        if (statusStr.includes("thành") || statusStr.includes("complete")) {
-            return <span className="badge-cyber badge-cyber-success">✅ Đã hoàn thành</span>;
-        }
-        if (statusStr.includes("hủy") || statusStr.includes("cancel")) {
-            return <span className="badge-cyber badge-cyber-danger">❌ Đã hủy đơn</span>;
-        }
-        return <span className="badge-cyber badge-cyber-warning">⏳ Chờ xử lý</span>;
+        // Backend bây giờ trả về chuỗi trực tiếp, ta so sánh chuỗi
+        const s = (status || "").trim();
+
+        if (s === "Chờ xử lý") return <span className="badge-cyber badge-cyber-warning">⏳ Chờ xử lý</span>;
+        if (s === "Đang giao") return <span className="badge-cyber badge-cyber-info">🚚 Đang giao hàng</span>;
+        if (s === "Đã hủy") return <span className="badge-cyber badge-cyber-danger">❌ Đã hủy đơn</span>;
+        return <span className="badge-cyber badge-cyber-success">✅ Đã hoàn thành</span>;
     };
 
     if (loading) return (
@@ -65,6 +61,27 @@ function Orders() {
             <p className="loading-text-glow">ĐANG KẾT NỐI TRUNG TÂM DỮ LIỆU ĐƠN HÀNG...</p>
         </div>
     );
+    const handleCancelOrder = async (orderId) => {
+        if (!window.confirm("Bạn có chắc chắn muốn hủy đơn hàng này?")) return;
+
+        try {
+            const res = await fetch(`https://localhost:7052/api/orders/${orderId}/cancel`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' }
+            });
+
+            if (res.ok) {
+                alert("Đã hủy đơn hàng thành công!");
+                // Cập nhật lại danh sách đơn hàng sau khi hủy
+                setOrders(orders.map(o => o.id === orderId || o.Id === orderId ? { ...o, status: "Đã hủy" } : o));
+            } else {
+                const data = await res.json();
+                alert(data.message || "Không thể hủy đơn hàng.");
+            }
+        } catch (err) {
+            console.error("Lỗi:", err);
+        }
+    };
 
     return (
         <div className="orders-cyber-bg py-5">
@@ -130,13 +147,23 @@ function Orders() {
                                         </div>
 
                                         {/* Nút bấm chuyển tiếp với hiệu ứng quét neon khi di chuột */}
-                                        <div className="col-md-2 text-md-end">
+                                        <div className="col-md-3 text-md-end d-flex gap-2">
                                             <button
-                                                className="btn-cyber btn-cyber-outline w-100 py-2.5"
+                                                className="btn-cyber btn-cyber-outline w-100 py-2"
                                                 onClick={() => navigate(`/orders/${order.id || order.Id}`)}
                                             >
                                                 🔍 CHI TIẾT
                                             </button>
+
+                                            {/* Chỉ hiện nút Hủy nếu đơn hàng là "Chờ xử lý" */}
+                                            {(order.status === "Chờ xử lý" || order.Status === 0) && (
+                                                <button
+                                                    className="btn-cyber btn-cyber-danger w-100 py-2"
+                                                    onClick={() => handleCancelOrder(order.id || order.Id)}
+                                                >
+                                                    ❌ HỦY
+                                                </button>
+                                            )}
                                         </div>
                                     </div>
                                 </div>
@@ -148,6 +175,15 @@ function Orders() {
 
             {/* HỆ THỐNG TOÀN BỘ CSS PHỤC VỤ STYLE VIP PRO */}
             <style>{`
+            .btn-cyber-danger {
+    background: transparent; 
+    border: 1px solid #ef4444; 
+    color: #ef4444;
+}
+.btn-cyber-danger:hover {
+    background: #ef4444; 
+    color: #fff;
+}
                 .orders-cyber-bg { 
                     background: radial-gradient(circle at 50% 0%, #111827 0%, #030712 100%); 
                     min-height: 90vh; 

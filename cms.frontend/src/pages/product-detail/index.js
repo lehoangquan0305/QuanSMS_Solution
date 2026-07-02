@@ -37,8 +37,12 @@ function ProductDetail() {
         ? product.imageUrl
         : BASE_URL + product.imageUrl;
 
-    // Các hàm tăng giảm số lượng tại chỗ
+    // 🔥 TIÊU CHÍ 42: Kiểm soát hàm tăng số lượng tại chỗ không vượt quá kho
     const handleIncrease = () => {
+        if (quantity >= product.stockQuantity) {
+            alert(`Số lượng sản phẩm trong kho không đủ! (Tối đa: ${product.stockQuantity})`);
+            return;
+        }
         setQuantity(prev => prev + 1);
     };
 
@@ -48,18 +52,30 @@ function ProductDetail() {
         }
     };
 
-    // ==========================
-    // THÊM VÀO GIỎ HÀNG (CÓ SỐ LƯỢNG TÙY CHỌN)
-    // ==========================
+    // ==========================================
+    // 🔥 TIÊU CHÍ 42: KIỂM TRA TỒN KHO KHI THÊM VÀO GIỎ HÀNG
+    // ==========================================
     const addToCart = () => {
         let cart = JSON.parse(localStorage.getItem("cart")) || [];
         const index = cart.findIndex(item => item.id === product.id);
 
+        let currentInCart = 0;
         if (index >= 0) {
-            // Cộng thêm đúng số lượng (quantity) mà người dùng đã chọn
+            currentInCart = cart[index].quantity;
+        }
+
+        // Tổng số lượng sau khi thêm = Số lượng hiện tại trong giỏ + Số lượng mới chọn
+        const totalRequested = currentInCart + quantity;
+
+        // Nếu tổng số lượng vượt quá số lượng trong database -> Chặn và đưa ra cảnh báo chuẩn tiêu chí
+        if (totalRequested > product.stockQuantity) {
+            alert("Số lượng sản phẩm trong kho không đủ!");
+            return;
+        }
+
+        if (index >= 0) {
             cart[index].quantity += quantity;
         } else {
-            // Thêm mới với số lượng (quantity) tương ứng
             cart.push({
                 id: product.id,
                 name: product.name,
@@ -110,8 +126,9 @@ function ProductDetail() {
                             {Number(product.price).toLocaleString()} đ
                         </h2>
 
-                        <p className="stock text-success fw-semibold">
-                            ✔ Còn {product.stockQuantity} sản phẩm trong kho
+                        {/* Thể hiện trạng thái kho rõ ràng */}
+                        <p className={`stock fw-semibold ${product.stockQuantity > 0 ? 'text-success' : 'text-danger'}`}>
+                            {product.stockQuantity > 0 ? `✔ Còn ${product.stockQuantity} sản phẩm trong kho` : '❌ Hết hàng'}
                         </p>
 
                         <p className="desc text-muted" style={{ lineHeight: "1.6" }}>
@@ -119,7 +136,7 @@ function ProductDetail() {
                             mang lại độ êm, độ bám và phong cách hiện đại đầy năng động.
                         </p>
 
-                        {/* BỘ CHỌN SỐ LƯỢNG (MỚI THÊM) */}
+                        {/* BỘ CHỌN SỐ LƯỢNG */}
                         <div className="quantity-selection mt-4">
                             <label className="fw-bold mb-2 d-block text-secondary" style={{ fontSize: "0.9rem" }}>
                                 SỐ LƯỢNG:
@@ -133,15 +150,17 @@ function ProductDetail() {
                                 <button
                                     onClick={handleDecrease}
                                     style={styles.qtyActionBtn}
+                                    disabled={product.stockQuantity === 0}
                                 >
                                     -
                                 </button>
                                 <span style={{ padding: "0 20px", fontWeight: "700", fontSize: "1.1rem", minWidth: "50px", textAlign: "center" }}>
-                                    {quantity}
+                                    {product.stockQuantity === 0 ? 0 : quantity}
                                 </span>
                                 <button
                                     onClick={handleIncrease}
                                     style={styles.qtyActionBtn}
+                                    disabled={product.stockQuantity === 0}
                                 >
                                     +
                                 </button>
@@ -153,9 +172,10 @@ function ProductDetail() {
                             <button
                                 className="btn btn-dark btn-lg flex-grow-1 py-3 fw-bold"
                                 onClick={addToCart}
+                                disabled={product.stockQuantity === 0}
                                 style={{ borderRadius: "30px", fontSize: "1rem", boxShadow: "0 4px 15px rgba(0,0,0,0.15)" }}
                             >
-                                🛒 Thêm vào giỏ hàng
+                                {product.stockQuantity > 0 ? "🛒 Thêm vào giỏ hàng" : "❌ Tạm hết hàng"}
                             </button>
 
                             <button
@@ -172,36 +192,40 @@ function ProductDetail() {
                 {showToast && (
                     <div className="cart-toast">
                         <img src={imageUrl} alt={product.name} />
-                        <div>
+                        <div style={{ flex: 1, minWidth: 0 }}>
                             <h6>✅ Đã thêm vào giỏ hàng</h6>
-                            <p className="mb-1 text-truncate" style={{ maxWidth: "220px" }}>{product.name}</p>
-                            <div className="d-flex justify-content-between align-items-center">
+                            <p className="mb-1 text-truncate">{product.name}</p>
+                            <div className="cart-toast-footer">
                                 <span>{Number(product.price).toLocaleString()} đ</span>
-                                <small className="badge bg-secondary ms-2">SL: {quantity}</small>
+                                <small className="qty-badge">SL: {quantity}</small>
                             </div>
                         </div>
                     </div>
                 )}
             </div>
 
-            {/* DESCRIPTION */}
+            {/* DESCRIPTION - TIÊU CHÍ 44: RENDER HTML AN TOÀN TỪ CKEDITOR */}
             <div className="product-bottom mt-5 pt-4 border-top">
                 <h3 className="fw-bold mb-3">Chi tiết sản phẩm</h3>
-                <p className="text-muted" style={{ lineHeight: "1.7" }}>
-                    <strong>{product.name}</strong> là một trong những dòng sản phẩm thể thao hiện đại hàng đầu hiện nay,
-                    được nghiên cứu kỹ lưỡng để phù hợp cho các hoạt động chạy bộ, tập luyện cường độ cao cũng như sử dụng hằng ngày.
-                    Thiết kế ôm chân tối ưu giúp tăng hiệu suất vận động vượt trội và mang lại cảm giác thoải mái êm ái tối đa suốt cả ngày dài.
-                </p>
-                <p className="text-muted" style={{ lineHeight: "1.7" }}>
-                    Sản phẩm sử dụng chất liệu vải lưới cao cấp siêu thoáng khí kết hợp với công nghệ đế đệm độc quyền, độ bền cao,
-                    phom dáng thời trang năng động dễ dàng phối với nhiều loại trang phục khác nhau tạo nên phong cách chất lừ.
-                </p>
+
+                {product.description ? (
+                    <div
+                        className="product-html-content text-muted"
+                        style={{ lineHeight: "1.7" }}
+                        dangerouslySetInnerHTML={{ __html: product.description }}
+                    />
+                ) : (
+                    /* Fallback text mặc định nếu database trống dữ liệu html */
+                    <div className="text-muted" style={{ lineHeight: "1.7" }}>
+                        <p><strong>{product.name}</strong> là một trong những dòng sản phẩm thể thao hiện đại hàng đầu hiện nay, được nghiên cứu kỹ lưỡng để phù hợp cho các hoạt động chạy bộ, tập luyện cường độ cao cũng như sử dụng hằng ngày.</p>
+                        <p>Sản phẩm sử dụng chất liệu vải lưới cao cấp siêu thoáng khí kết hợp với công nghệ đế đệm độc quyền, độ bền cao, phom dáng thời trang năng động.</p>
+                    </div>
+                )}
             </div>
         </div>
     );
 }
 
-// Style nội bộ hỗ trợ cho cụm tăng giảm số lượng tròn trịa tinh tế
 const styles = {
     qtyActionBtn: {
         width: "35px",

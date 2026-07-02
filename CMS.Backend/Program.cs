@@ -11,7 +11,17 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 );
 
 // MVC + API
+// ...
+// Sửa dòng này từ AddControllers() thành AddControllersWithViews()
 builder.Services.AddControllersWithViews();
+
+// Cấu hình thêm để tránh lỗi JSON cho các Controller trả về API nếu cần
+builder.Services.AddControllersWithViews()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
+    });
+// ...
 
 // Auth
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
@@ -40,7 +50,7 @@ builder.Services.AddCors(options =>
     });
 });
 
-
+builder.Services.AddTransient<CMS.Backend.Services.EmailService>();
 var app = builder.Build();
 
 // ERROR + HSTS

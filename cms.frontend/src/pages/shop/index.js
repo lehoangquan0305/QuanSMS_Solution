@@ -6,6 +6,10 @@ function Shop() {
     // STATE CHUNG ĐỂ LỌC SẢN PHẨM TRONG CỬA HÀNG
     const [categoryId, setCategoryId] = useState(null);
 
+    // 🔥 TIÊU CHÍ 39: Quản lý trạng thái khoảng giá Min - Max toàn trang Shop
+    const [minPrice, setMinPrice] = useState("");
+    const [maxPrice, setMaxPrice] = useState("");
+
     // Style bao bọc toàn trang Shop để ép nền tối luxury đồng bộ
     const shopPageStyle = {
         background: "radial-gradient(circle at 50% 0%, #0f172a 0%, #030712 100%)",
@@ -54,14 +58,26 @@ function Shop() {
                     {/* BỘ LỌC SIDEBAR - CHIẾM 3 CỘT */}
                     <div className="col-lg-3">
                         <div className="shop-sidebar-wrapper-cyber">
-                            <ShopSidebar setCategoryId={setCategoryId} />
+                            {/* 🔥 Truyền các hàm set khoảng giá xuống Sidebar để tương tác */}
+                            <ShopSidebar
+                                setCategoryId={setCategoryId}
+                                minPrice={minPrice}
+                                maxPrice={maxPrice}
+                                setMinPrice={setMinPrice}
+                                setMaxPrice={setMaxPrice}
+                            />
                         </div>
                     </div>
 
                     {/* LƯỚI HIỂN THỊ SẢN PHẨM - CHIẾM 9 CỘT */}
                     <div className="col-lg-9">
                         <div className="product-list-wrapper-cyber">
-                            <ProductList categoryId={categoryId} />
+                            {/* 🔥 Truyền giá trị Min - Max xuống List để kích hoạt gọi API lọc ngầm */}
+                            <ProductList
+                                categoryId={categoryId}
+                                minPrice={minPrice}
+                                maxPrice={maxPrice}
+                            />
                         </div>
                     </div>
 

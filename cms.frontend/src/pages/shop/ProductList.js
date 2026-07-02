@@ -1,11 +1,16 @@
 import React, { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom"; // 🔥 TIÊU CHÍ 40: Lắng nghe URL thay đổi
 import productService from "../../services/productService";
 import ProductCard from "../../components/ProductCard";
 
-function ProductList({ categoryId }) {
+// 🔥 TIÊU CHÍ 39: Nhận thêm 2 props khoảng giá minPrice, maxPrice từ Shop.jsx
+function ProductList({ categoryId, minPrice, maxPrice }) {
     const [products, setProducts] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [productsPerPage] = useState(6); // 6 sản phẩm mỗi trang
+
+    // Lắng nghe các thay đổi về query parameters trên thanh URL (?search=...)
+    const location = useLocation();
 
     // 🔥 STATE QUẢN LÝ TOAST THÔNG BÁO CHO TRANG SHOP
     const [toastInfo, setToastInfo] = useState({ show: false, name: "", price: 0, imageUrl: "" });
@@ -13,32 +18,65 @@ function ProductList({ categoryId }) {
     useEffect(() => {
         const fetchData = async () => {
             try {
+                // Đọc từ khóa tìm kiếm từ URL
+                const queryParams = new URLSearchParams(location.search);
+                const searchKeyword = queryParams.get("search");
+
                 let data;
-                if (categoryId) {
+
+                // --- ĐỘ ƯU TIÊN LOGIC GỌI API ---
+                // 1. Nếu có từ khóa tìm kiếm -> Gọi API tìm kiếm backend (.env chuẩn doanh nghiệp - Tiêu chí 45)
+                if (searchKeyword && searchKeyword.trim() !== "") {
+                    const API_URL = process.env.REACT_APP_API_URL || "https://localhost:7052/api";
+                    const res = await fetch(`${API_URL}/products/search/${encodeURIComponent(searchKeyword)}`);
+                    if (res.ok) {
+                        data = await res.json();
+                    } else {
+                        data = [];
+                    }
+                }
+                // 2. Nếu không tìm kiếm nhưng có click danh mục Sidebar
+                else if (categoryId) {
                     data = await productService.getByCategory(categoryId);
-                } else {
+                }
+                // 3. Mặc định: Lấy tất cả sản phẩm
+                else {
                     data = await productService.getAllProducts();
                 }
+
                 setProducts(data || []);
-                setCurrentPage(1);
+                setCurrentPage(1); // Reset về trang 1 khi nguồn dữ liệu thay đổi
             } catch (err) {
                 console.error("Lỗi lấy danh sách sản phẩm:", err);
+                setProducts([]);
             }
         };
         fetchData();
-    }, [categoryId]);
+    }, [categoryId, location.search]); // 🔥 Re-run khi đổi danh mục HOẶC khi gõ từ khóa mới trên Header
 
+    // ==========================================
+    // 🔥 TIÊU CHÍ 39: XỬ LÝ LỌC GIÁ NGẦM (CLIENT-SIDE FILTER)
+    // Tự động kích hoạt lọc dựa trên mảng `products` gốc khi có minPrice hoặc maxPrice
+    const filteredProducts = products.filter(product => {
+        const price = Number(product.price);
+        const min = minPrice ? Number(minPrice) : 0;
+        const max = maxPrice ? Number(maxPrice) : Infinity;
+        return price >= min && price <= max;
+    });
+    // ==========================================
+
+    // Tính toán phân trang dựa trên mảng đã được lọc giá `filteredProducts`
     const indexOfLastProduct = currentPage * productsPerPage;
     const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
-    const currentProducts = products.slice(indexOfFirstProduct, indexOfLastProduct);
-    const totalPages = Math.ceil(products.length / productsPerPage);
+    const currentProducts = filteredProducts.slice(indexOfFirstProduct, indexOfLastProduct);
+    const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
 
     const handlePageChange = (pageNumber) => {
         setCurrentPage(pageNumber);
         window.scrollTo({ top: 200, behavior: 'smooth' });
     };
 
-    // 🔥 XỬ LÝ MUA NHANH + BẬT TOAST THÔNG BÁO TẠI CHỖ
+    // 🔥 XỬ LÝ MUA NHANH + BẬT TOAST THÔNG BÁO TẠI CHỒ
     const handleAddToCartQuick = (product) => {
         const BASE_URL = "https://localhost:7052";
         const imageUrl = product.imageUrl?.startsWith("http")
@@ -77,16 +115,24 @@ function ProductList({ categoryId }) {
         }, 3000);
     };
 
+    // Lấy từ khóa hiện tại để hiển thị linh động tiêu đề
+    const currentKeyword = new URLSearchParams(location.search).get("search");
+
     return (
         <div style={{ fontFamily: "SFMono-Regular, Menlo, Monaco, Consolas, monospace", position: "relative" }}>
 
             {/* HEADER ZONE */}
             <div className="d-flex justify-content-between align-items-center mb-4 pb-3" style={{ borderBottom: "1px solid rgba(6, 182, 212, 0.15)" }}>
-                <h3 className="m-0 text-white fw-bold text-uppercase" style={{ fontSize: '1.3rem', letterSpacing: '1px', textShadow: "0 0 10px rgba(6, 182, 212, 0.3)" }}>
-                    ⚡ MATRIX // PRODUCTS
+                <h3 className="m-0 text-white fw-bold text-uppercase" style={{ fontSize: '1.2rem', letterSpacing: '1px', textShadow: "0 0 10px rgba(6, 182, 212, 0.3)" }}>
+                    {currentKeyword
+                        ? `🔍 SEARCH // "${currentKeyword.toUpperCase()}"`
+                        : categoryId
+                            ? `⚡ MATRIX // CATEGORY ${categoryId}`
+                            : "⚡ MATRIX // PRODUCTS"}
                 </h3>
+                {/* Hiển thị số lượng dựa trên danh sách đã lọc */}
                 <span className="badge px-3 py-2" style={{ background: "rgba(6, 182, 212, 0.1)", color: "#22d3ee", border: "1px solid rgba(6, 182, 212, 0.3)", borderRadius: "8px" }}>
-                    TOTAL: {products.length} ITEMS
+                    FOUND: {filteredProducts.length} ITEMS
                 </span>
             </div>
 
@@ -106,9 +152,16 @@ function ProductList({ categoryId }) {
                         </div>
                     ))
                 ) : (
-                    <div className="col-12 text-center py-5" style={{ background: "rgba(17, 24, 39, 0.4)", borderRadius: "20px", border: "1px solid rgba(255,255,255,0.05)" }}>
-                        <span style={{ fontSize: "3rem" }}>📦</span>
-                        <p className="mt-2" style={{ color: "#9ca3af", fontWeight: "600" }}>Nguồn dữ liệu rỗng. Không tìm thấy sản phẩm.</p>
+                    /* 🔥 TIÊU CHÍ 43: Khi khoảng giá hoặc từ khóa không ra kết quả -> Hiện hình ảnh / emoji kèm câu cảnh báo bắt buộc */
+                    <div className="col-12 text-center py-5" style={{ background: "rgba(17, 24, 39, 0.4)", borderRadius: "20px", border: "1px dashed rgba(239, 68, 68, 0.3)" }}>
+                        <span style={{ fontSize: "3.5rem", display: "block", marginBottom: "15px", filter: "drop-shadow(0 0 10px rgba(239, 68, 68, 0.4))" }}>📭</span>
+                        <p className="mt-2 text-danger fw-bold text-uppercase" style={{ fontSize: "1.1rem", letterSpacing: "1px" }}>
+                            SYSTEM MESSAGE // FILTER EMPTY
+                        </p>
+                        <p className="text-white fw-semibold" style={{ fontSize: "0.95rem" }}>
+                            "Không tìm thấy sản phẩm nào phù hợp với tiêu chí của bạn"
+                        </p>
+                        <p style={{ color: "#6b7280", fontSize: "0.85rem" }}>Bồ hãy thử điều chỉnh lại thanh cuộn Đơn giá Min - Max hoặc làm sạch bộ lọc giá nhé.</p>
                     </div>
                 )}
             </div>
@@ -157,7 +210,6 @@ function ProductList({ categoryId }) {
             )}
 
             {/* HOÀN THIỆN TOÀN BỘ STYLE INLINE */}
-            {/* HOÀN THIỆN TOÀN BỘ STYLE INLINE (ĐÃ BAO GỒM FIX CARD) */}
             <style>{`
                 .shop-cyber-pagination .page-link {
                     width: 44px;
@@ -196,7 +248,6 @@ function ProductList({ categoryId }) {
                     to { opacity: 1; transform: translateY(0); }
                 }
 
-                /* STYLES RIÊNG CHO TOAST CYBER */
                 .cart-toast-cyber {
                     position: fixed;
                     top: 35px;
@@ -242,7 +293,6 @@ function ProductList({ categoryId }) {
                     to { opacity: 1; transform: translateX(0) scale(1); }
                 }
 
-                /* ⚡ FIX TÀNG HÌNH & ÉP GIÁ TRỊ TOÀN BỘ PRODUCT CARD TRÊN TRANG SHOP NỀN TỐI */
                 .shop-anim-fade .product-card-vip {
                     background: rgba(30, 41, 59, 0.5) !important;
                     border: 1px solid rgba(6, 182, 212, 0.15) !important;

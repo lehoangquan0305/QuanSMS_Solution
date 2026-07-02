@@ -18,15 +18,17 @@ function Login() {
         let errorMsg = "";
 
         switch (name) {
-            case "email":
+            case "email": {
                 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
                 if (!value) errorMsg = "Email không được để trống";
                 else if (!emailRegex.test(value)) errorMsg = "Định dạng Email không hợp lệ";
                 break;
-            case "password":
+            }
+            case "password": {
                 if (!value) errorMsg = "Mật khẩu không được để trống";
                 else if (value.length < 6) errorMsg = "Mật khẩu phải có ít nhất 6 ký tự";
                 break;
+            }
             default:
                 break;
         }
@@ -45,19 +47,26 @@ function Login() {
 
         // Kiểm tra lỗi trước khi submit
         let hasErrors = false;
+        const currentErrors = {};
+
         Object.keys(form).forEach(key => {
             if (!form[key]) {
-                setErrors(prev => ({ ...prev, [key]: "Trường này là bắt buộc nhập" }));
+                currentErrors[key] = "Trường này là bắt buộc nhập";
                 hasErrors = true;
             }
         });
 
-        if (hasErrors || Object.values(errors).some(err => err)) return;
+        if (hasErrors) {
+            setErrors(prev => ({ ...prev, ...currentErrors }));
+            return;
+        }
+
+        if (Object.values(errors).some(err => err)) return;
 
         try {
             setLoading(true);
-
-            const res = await fetch("https://localhost:7052/api/auth/login", {
+            const API_URL = process.env.REACT_APP_API_URL;
+            const res = await fetch(`${API_URL}/auth/login`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(form)
@@ -73,9 +82,9 @@ function Login() {
             }
 
             if (!res.ok) {
-                // Nếu sai tài khoản hoặc mật khẩu, đẩy thông báo lỗi vào đúng ô hoặc lỗi chung
+                // ✅ ĐÃ SỬA: Loại bỏ biến navigate thừa thãi gây lỗi cú pháp ở đây
                 if (data.message?.toLowerCase().includes("email") || data.message?.toLowerCase().includes("tài khoản")) {
-                    setErrors(prev => ({ ...prev, navigate, email: data.message }));
+                    setErrors(prev => ({ ...prev, email: data.message }));
                 } else if (data.message?.toLowerCase().includes("mật khẩu") || data.message?.toLowerCase().includes("password")) {
                     setErrors(prev => ({ ...prev, password: data.message }));
                 } else {
@@ -85,15 +94,12 @@ function Login() {
             }
 
             // ✅ LƯU THÔNG TIN USER VÀO LOCALSTORAGE
-            // ✅ LƯU THÔNG TIN USER GỐC TỪ API
             localStorage.setItem("user", JSON.stringify(data.user));
 
-            // ✅ ĐỒNG BỘ: Nếu tài khoản này đã từng lưu SĐT/Địa chỉ biệt lập trước đó, nạp luôn vào bộ nhớ máy
             if (data.user) {
                 const savedPhone = localStorage.getItem(`user_phone_${data.user.email}`) || data.user.phone || "";
                 const savedAddress = localStorage.getItem(`user_address_${data.user.email}`) || data.user.address || "";
 
-                // Găm chặt theo Email để nếu đổi tài khoản khác không bị lẫn lộn dữ liệu
                 localStorage.setItem("user_phone", savedPhone);
                 localStorage.setItem("user_address", savedAddress);
             }
@@ -102,7 +108,6 @@ function Login() {
             // ✅ BẬT POP-UP THÔNG BÁO THÀNH CÔNG ĐẸP MẮT
             setShowSuccessToast(true);
 
-            // Chờ hiệu ứng chạy mượt mà khoảng 1.5 giây rồi chuyển hướng về Trang Chủ
             setTimeout(() => {
                 setShowSuccessToast(false);
                 navigate("/");
@@ -172,13 +177,35 @@ function Login() {
                         {errors.password && <span style={styles.errorMessage}>⚠️ {errors.password}</span>}
                     </div>
 
-                    {/* Nút bấm */}
+                    {/* Nút Quên Mật Khẩu */}
+                    <div style={{ textAlign: "right", marginTop: "-6px" }}>
+                        <span
+                            style={styles.forgotPasswordLink}
+                            onClick={() => navigate("/forgot-password")}
+                            className="forgot-password-hover"
+                        >
+                            Quên mật khẩu?
+                        </span>
+                    </div>
+
+                    {/* Nút bấm Đăng nhập chuyên nghiệp */}
                     <button
                         type="submit"
                         disabled={loading}
-                        style={loading ? { ...styles.button, opacity: 0.7 } : styles.button}
+                        style={{
+                            ...styles.button,
+                            ...(loading ? styles.buttonDisabled : {})
+                        }}
+                        className="login-btn-submit"
                     >
-                        {loading ? "Đang xác thực..." : "Đăng Nhập"}
+                        {loading ? (
+                            <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "10px" }}>
+                                <span className="login-spinner"></span>
+                                <span>Đang xác thực...</span>
+                            </div>
+                        ) : (
+                            "Đăng Nhập"
+                        )}
                     </button>
                 </form>
 
@@ -187,7 +214,7 @@ function Login() {
                 </div>
             </div>
 
-            {/* 🔥 POP-UP TOAST THÀNH CÔNG CỰC ĐẸP MẮT */}
+            {/* POP-UP TOAST THÀNH CÔNG */}
             {showSuccessToast && (
                 <div className="login-success-toast">
                     <div className="toast-icon">🎉</div>
@@ -198,7 +225,7 @@ function Login() {
                 </div>
             )}
 
-            {/* Nhúng CSS Animation trực tiếp */}
+            {/* Nhúng CSS trực tiếp */}
             <style>{`
                 @keyframes float {
                     0% { transform: translateY(0px) rotate(0deg); }
@@ -213,10 +240,42 @@ function Login() {
                     from { opacity: 0; transform: translate(-50%, 50px); }
                     to { opacity: 1; transform: translate(-50%, 0); }
                 }
+                @keyframes loginSpin {
+                    to { transform: rotate(360deg); }
+                }
                 .custom-input:focus {
                     border-color: #6a11cb !important;
                     box-shadow: 0 0 8px rgba(106, 17, 203, 0.4) !important;
                     background: rgba(255, 255, 255, 1) !important;
+                    color: #111 !important;
+                }
+                .forgot-password-hover {
+                    transition: all 0.2s ease;
+                }
+                .forgot-password-hover:hover {
+                    color: #ffffff !important;
+                    text-shadow: 0 0 8px rgba(255, 255, 255, 0.6);
+                    text-decoration: underline !important;
+                }
+                .login-btn-submit {
+                    position: relative;
+                    overflow: hidden;
+                }
+                .login-btn-submit:hover:not(:disabled) {
+                    transform: translateY(-2px);
+                    box-shadow: 0 6px 20px rgba(106, 17, 203, 0.6) !important;
+                    background: linear-gradient(to right, #2575fc 0%, #6a11cb 100%) !important;
+                }
+                .login-btn-submit:active:not(:disabled) {
+                    transform: translateY(0);
+                }
+                .login-spinner {
+                    width: 18px;
+                    height: 18px;
+                    border: 2px solid rgba(255, 255, 255, 0.3);
+                    border-top-color: #ffffff;
+                    border-radius: 50%;
+                    animation: loginSpin 0.8s linear infinite;
                 }
                 .login-success-toast {
                     position: fixed;
@@ -242,7 +301,7 @@ function Login() {
                     height: 45px;
                     display: flex;
                     align-items: center;
-                    justifyContent: center;
+                    justify-content: center;
                     border-radius: 50%;
                 }
             `}</style>
@@ -259,14 +318,14 @@ const styles = {
         alignItems: "center",
         background: "linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)",
         overflow: "hidden",
-        fontFamily: "'Segoe UI', Roboto, sans-serif",
+        fontFamily: "'Segoe UI', Roboto, sans-serif"
     },
     backgroundCircles: { position: "absolute", width: "100%", height: "100%", zIndex: 1 },
     circle: {
         position: "absolute",
         borderRadius: "50%",
         background: "rgba(255, 255, 255, 0.1)",
-        animation: "float 8s infinite ease-in-out",
+        animation: "float 8s infinite ease-in-out"
     },
     circle1: { width: "250px", height: "250px", top: "10%", right: "15%" },
     circle2: { width: "350px", height: "350px", bottom: "-50px", left: "50px", animationDelay: "1.5s" },
@@ -283,7 +342,7 @@ const styles = {
         border: "1px solid rgba(255, 255, 255, 0.2)",
         boxShadow: "0 8px 32px 0 rgba(0, 0, 0, 0.3)",
         color: "#fff",
-        animation: "fadeIn 1s ease-out",
+        animation: "fadeIn 1s ease-out"
     },
     title: {
         textAlign: "center",
@@ -293,12 +352,12 @@ const styles = {
         letterSpacing: "1px",
         background: "linear-gradient(to right, #ffffff, #e0e0e0)",
         WebkitBackgroundClip: "text",
-        WebkitTextFillColor: "transparent",
+        WebkitTextFillColor: "transparent"
     },
     subtitle: { textAlign: "center", fontSize: "0.9rem", color: "#e0e0e0", marginBottom: "30px", lineHeight: "1.4" },
     form: { display: "flex", flexDirection: "column", gap: "16px" },
     inputGroup: { position: "relative", display: "flex", alignItems: "center" },
-    inputIcon: { position: "absolute", left: "15px", fontSize: "1.1rem", opacity: 0.7 },
+    inputIcon: { position: "absolute", left: "15px", fontSize: "1.1rem", opacity: 0.7, color: "#fff", zIndex: 3 },
     input: {
         width: "100%",
         padding: "14px 12px 14px 45px",
@@ -308,14 +367,20 @@ const styles = {
         color: "#fff",
         fontSize: "1rem",
         outline: "none",
-        transition: "all 0.3s ease",
+        transition: "all 0.3s ease"
+    },
+    forgotPasswordLink: {
+        fontSize: "0.85rem",
+        color: "rgba(255, 255, 255, 0.7)",
+        cursor: "pointer",
+        fontWeight: "500"
     },
     errorMessage: {
         color: "#ffdddd",
         fontSize: "0.8rem",
         fontWeight: "600",
         textAlign: "left",
-        paddingLeft: "5px",
+        paddingLeft: "5px"
     },
     globalError: {
         background: "rgba(231, 76, 60, 0.2)",
@@ -339,7 +404,13 @@ const styles = {
         cursor: "pointer",
         boxShadow: "0 4px 15px rgba(106, 17, 203, 0.4)",
         transition: "all 0.3s ease",
-        marginTop: "10px",
+        marginTop: "10px"
+    },
+    buttonDisabled: {
+        opacity: 0.6,
+        cursor: "not-allowed",
+        transform: "none !important",
+        boxShadow: "none !important"
     },
     footerText: { textAlign: "center", marginTop: "25px", fontSize: "0.9rem", color: "#e0e0e0" },
     link: { color: "#fff", fontWeight: "700", cursor: "pointer", textDecoration: "underline", marginLeft: "5px" }

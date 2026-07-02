@@ -52,24 +52,12 @@
                                     </div>
                                 </td>
                                 <td>
-                                    @if (item.Status == 0)
-                                    {
-                                        <span class="badge bg-soft-warning text-warning badge-status px-3 py-2">
-                                            ⏳ Chờ duyệt
-                                        </span>
-                                    }
-                                    else if (item.Status == 1)
-                                    {
-                                        <span class="badge bg-soft-info text-info badge-status px-3 py-2">
-                                            🚚 Đang giao
-                                        </span>
-                                    }
-                                    else
-                                    {
-                                        <span class="badge bg-soft-success text-success badge-status px-3 py-2">
-                                            ✅ Hoàn thành
-                                        </span>
-                                    }
+                                    <select class="form-select form-select-sm" onchange="updateStatus(@item.Id, this.value)">
+                                        <option value="0" selected="@(item.Status == 0)">⏳ Chờ duyệt</option>
+                                        <option value="1" selected="@(item.Status == 1)">🚚 Đang giao</option>
+                                        <option value="2" selected="@(item.Status == 2)">✅ Hoàn thành</option>
+                                        <option value="3" selected="@(item.Status == 3)">❌ Đã hủy</option>
+                                    </select>
                                 </td>
                                 <td>
                                     <small class="text-muted text-truncate-notes" title="@item.Notes">
@@ -80,6 +68,7 @@
                                     <a href="/OrderDetail/Index?orderId=@item.Id" class="btn btn-action btn-action-view d-inline-flex align-items-center gap-1">
                                         🔍 Xem chi tiết
                                     </a>
+                                    <button onclick="deleteOrder(@item.Id)" class="btn btn-sm btn-outline-danger">🗑️ Xóa</button>
                                 </td>
                             </tr>
                         }
@@ -228,3 +217,24 @@
         }
     }
 </style>
+<script>
+    async function updateStatus(id, status) {
+        if (!confirm("Xác nhận cập nhật trạng thái đơn hàng?")) return;
+
+        const response = await fetch(`/Order/UpdateStatus?id=${id}&status=${status}`, { method: 'POST' });
+        if (response.ok) {
+            location.reload(); // Tải lại trang để cập nhật giao diện
+        }
+    }
+
+    async function deleteOrder(id) {
+        if (!confirm("Bạn có chắc chắn muốn xóa đơn hàng này? Việc này không thể hoàn tác!")) return;
+
+        const response = await fetch(`/Order/DeleteOrder?id=${id}`, { method: 'POST' });
+        if (response.ok) {
+            location.reload();
+        } else {
+            alert("Lỗi khi xóa đơn hàng.");
+        }
+    }
+</script>
